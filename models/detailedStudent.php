@@ -39,7 +39,7 @@ class TutoradosModelDetailedStudent extends AppModel {
             $studentID = "ERROR";
         $istId = $fenixEdu->getIstId();
 		$this->data["student"] = App::instance()->db->
-            select(array("istid","name", "extra_info", "ist_number","email", "telefone", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number"))->
+            select(array("istid","deslocated","name", "extra_info", "ist_number","email", "telefone", "other", "preferencial_contact","entry_year" ,"entry_grade", "deslocated", "entry_phase", "option_number"))->
             from("tuturado_student ")->
             where("tutor_id=:tutor_id AND istid=:studentID")->
             dispatch(array("tutor_id" => $istId,"studentID"=> $studentID));
@@ -67,12 +67,16 @@ class TutoradosModelDetailedStudent extends AppModel {
 //            var_dump($this->data["meetings"][$index]["per_cent"]);
 
             $this->data["meetings"][$index]["per_cent"] = $this->data["meetings"][$index]["per_cent"][0]["per_cent"];
-            var_dump(explode( '.',$this->data["meetings"][$index]["per_cent"]));
+//            var_dump(explode( '.',$this->data["meetings"][$index]["per_cent"]));
             $this->data["meetings"][$index]["per_cent"] = explode( '.',$this->data["meetings"][$index]["per_cent"])[0];
             $index++;
         }
         $this->data["total_reunions"] = sizeof($this->getData()["meetings"]);
         $this->data["percentage_attended"] = (string)((100*$this->data["number_present"])/ $this->data["total_reunions"]);
+    }
+
+    public function getPercentageAttended() {
+
     }
 
 	public function getData(){

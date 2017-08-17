@@ -36,8 +36,8 @@ class TutoradosModelMeetings extends AppModel {
 
         $istId = $fenixEdu->getIstId();
 		$this->data["meetings"] = App::instance()->db->
-            select(array("reunion_id","date","local","meio","extra_info"))->
-            from("tuturado_reunion")->
+            select(array("responsible_tutor","date","reunion_id","local","meio","extra_info","tutor_name"))->
+            from("tuturado_reunion JOIN tuturado_tutor ON tuturado_tutor.istid=tuturado_reunion.responsible_tutor")->
             where("responsible_tutor=:tutor_id")->
             dispatch(array("tutor_id" => $istId));
 
@@ -48,11 +48,10 @@ class TutoradosModelMeetings extends AppModel {
 //            where("tutor_id=:tutor_id")->
 //            dispatch(array("tutor_id" => $istId));
 
-//        var_dump($totalStudents);
-        echo("");
+//        echo("");
         $totalStudents = (int)$totalStudents[0]["totalStudents"];
 //        var_dump($totalStudents);
-        echo("");
+//        echo("");
 
 
         $istId = $fenixEdu->getIstId();
@@ -62,7 +61,6 @@ class TutoradosModelMeetings extends AppModel {
         where("tutor_id=:tutor_id")->
         dispatch(array("tutor_id" => $istId));
 
-        var_dump($students);
 
         $counter = 0;
         foreach($this->data["meetings"] as $meeting){
@@ -71,7 +69,7 @@ class TutoradosModelMeetings extends AppModel {
                 execute("SELECT tuturado_reunion_atendence.student_id,tuturado_student.name,tuturado_reunion_atendence.extra_info, present
                          FROM tuturado_reunion_atendence JOIN tuturado_student ON tuturado_reunion_atendence.student_id=tuturado_student.istid
                          WHERE tuturado_reunion_atendence.reunion_id=:reunion_id
-                         ORDER BY present DESC,tuturado_reunion_atendence.student_id",array("reunion_id" => $meeting_id));
+                         ORDER BY tuturado_reunion_atendence.student_id",array("reunion_id" => $meeting_id));
 //                select(array("tuturado_reunion_atendence.student_id","tuturado_student.name","tuturado_reunion_atendence.extra_info"))->
 //                from(array("tuturado_reunion_atendence","tuturado_student"),"tuturado_reunion_atendence.student_id=tuturado_student.istid")->
 //                where("tuturado_reunion_atendence.reunion_id=:reunion_id")->

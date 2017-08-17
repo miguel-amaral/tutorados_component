@@ -1,8 +1,8 @@
 DROP TABLES tuturado_reunion_atendence,tuturado_student,tuturado_reunion,tuturado_tutor;
 --drop table tuturado_tutor;
 CREATE TABLE IF NOT EXISTS tuturado_tutor (
-    istid VARCHAR(255) PRIMARY KEY NOT NULL
-
+    istid VARCHAR(255) PRIMARY KEY NOT NULL,
+    tutor_name VARCHAR(255)
 );
 --drop table tuturado_reunion;
 CREATE TABLE IF NOT EXISTS  tuturado_reunion (
@@ -15,7 +15,9 @@ CREATE TABLE IF NOT EXISTS  tuturado_reunion (
     local VARCHAR(255),
     meio VARCHAR(255),
 
-    extra_info TEXT
+    extra_info TEXT,
+
+    UNIQUE KEY (responsible_tutor,date,local,meio)
 );
 --drop table tuturado_student;
 CREATE TABLE IF NOT EXISTS tuturado_student(
@@ -30,9 +32,10 @@ CREATE TABLE IF NOT EXISTS tuturado_student(
 
     preferencial_contact VARCHAR(255),
     entry_grade float,
-    deslocated int,
+    deslocated BOOLEAN,
     entry_phase int,
     option_number int,
+    entry_year int,
 
     tutor_id VARCHAR(255),
     FOREIGN KEY (tutor_id) REFERENCES tuturado_tutor (istid) ON DELETE RESTRICT ON UPDATE CASCADE,

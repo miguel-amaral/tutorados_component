@@ -36,7 +36,7 @@ class TutoradosModelStudents extends AppModel {
 
         $istId = $fenixEdu->getIstId();
 		$this->data["students"] = App::instance()->db->
-            select(array("istid","name",  "ist_number","email", "telefone", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number","extra_info"))->
+            select(array("istid","name",  "ist_number","email", "telefone","entry_year", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number","extra_info"))->
             from("tuturado_student ")->
             where("tutor_id=:tutor_id")->
             dispatch(array("tutor_id" => $istId));

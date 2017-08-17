@@ -44,6 +44,7 @@ class TutoradosViewAddMeeting extends AppView {
 			$html .= "</div>";
 		}else{
 //            $html .= "<div class=\"panel-body\" >";
+            $html .= "<form action=\"/index.php?com=".$_GET["com"]."&view=meetings\" method=\"POST\">";
             $html .= '<div class="container">';
             $html .= "<div class=\"row\" style='margin-top: 20px'>";
             $html .= "    <div class=\"col-xs-1\"></div>";
@@ -51,8 +52,8 @@ class TutoradosViewAddMeeting extends AppView {
             $html .= '    <div class="row">';
             $html .= '        <div class="col-xs-5 form-group">';
             $html .= "          <div class=\"input-group\">";
-            $html .= "                <span class=\"input-group-addon\">Local</span>";
-            $html .= '                <input type="text" id="datetime12" class="form-control" data-format="DD-MM-YYYY h:mm a" data-template="DD / MM / YYYY     hh : mm a" name="datetime" value="21-12-2012 8:30 pm">';
+            $html .= "                <span class=\"input-group-addon\">Data</span>";
+            $html .= '                <input required name="new_meeting_date" type="text" id="datetime12" class="form-control" data-format="DD-MM-YYYY h:mm a" data-template="DD / MM / YYYY     hh : mm" name="datetime" value="'.date("d-m-Y G:i").'">';
             $html .= "          </div>";
             $html .= '        </div>';
 
@@ -67,7 +68,7 @@ class TutoradosViewAddMeeting extends AppView {
             $html .= '        <div class="col-xs-5 form-group">';
             $html .= "          <div class=\"input-group\">";
             $html .= "                <span class=\"input-group-addon\">Local</span>";
-            $html .= "                <input id=\"place\" type=\"text\" class=\"form-control\" name=\"Local\" placeholder=\"Local onde foi/será a reunião\" value=\"\">";
+            $html .= "                <input required name='new_meeting_place' id=\"place\" type=\"text\" class=\"form-control\" name=\"Local\" placeholder=\"Local onde foi/será a reunião\" value=\"\">";
             $html .= "          </div>";
             $html .= '        </div>';
             $html .= "     </div>";
@@ -75,7 +76,7 @@ class TutoradosViewAddMeeting extends AppView {
             $html .= '        <div class="col-xs-5 form-group">';
             $html .= "          <div class=\"input-group\">";
             $html .= "                <span class=\"input-group-addon\">Meio&nbsp;</span>";
-            $html .= "                <input id=\"meio\" type=\"text\" class=\"form-control\" name=\"meio\" placeholder=\"e.g. skype, slack ou presencial\" value=\"\">";
+            $html .= "                <input required name='new_meeting_meio' id=\"meio\" type=\"text\" class=\"form-control\" name=\"meio\" placeholder=\"e.g. skype, slack ou presencial\" value=\"\">";
             $html .= "          </div>";
             $html .= '        </div>';
             $html .= "     </div>";
@@ -85,7 +86,7 @@ class TutoradosViewAddMeeting extends AppView {
             $html .= "     <div class=\"row\">";
             $html .= '        <div class="col-xs-11 form-group">';
             $html .= '            <label for="comment">Comentários Gerais:</label>';
-            $html .= '            <textarea class="form-control" rows="4" id="comment"></textarea>';
+            $html .= '            <textarea name="new_meeting_comment" class="form-control" rows="4" id="comment"></textarea>';
             $html .= '        </div>';
             $html .= "     </div>";
 
@@ -93,13 +94,14 @@ class TutoradosViewAddMeeting extends AppView {
             $html .= '        <h2>Presenças</h2>';
             $html .= "<div class=\"row\" STYLE='color: white'>cenas</div>";
             foreach ($this->getData()["students"] as $student) {
+                $html .= "		<input type='hidden' name='new_meeting_students[]' value='".$student["istid"]."'>";
 
                 $html .= "         <div class=\"row\">";
 
                 $html .= "            <div class='col-xs-1'>".$student["istid"]."</div>";
                 $html .= "            <div class='col-xs-6'>".$student["name"]."</div>";
                 $html .= '            <div class="checkbox col-xs-2">';
-                $html .= '                <label><input type="checkbox" >Presente</label>';
+                $html .= '                <label><input name="new_meeting_present'.$student["istid"].'" type="checkbox" >Presente</label>';
                 $html .= '            </div>';
                 $html .= "	    	  <div class=\"col-xs-2\"><a data-toggle=\"collapse\" href=\"#expandable" . $student["istid"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student["istid"] . "\">Adicionar Comentário</a></div>";
                 $html .= "         </div>";
@@ -109,7 +111,7 @@ class TutoradosViewAddMeeting extends AppView {
                 $html .= '                <div class="col-xs-1"></div>';
                 $html .= '                <div class="col-xs-10 form-group">';
                 $html .= '                    <label for="comment">Informações Individuais:</label>';
-                $html .= '                    <textarea class="form-control" rows="4" id="comment"></textarea>';
+                $html .= '                    <textarea name="new_meeting_comment'.$student["istid"].'" class="form-control" rows="4" id="comment"></textarea>';
                 $html .= '                </div>';
                 $html .= "             </div>";
                 $html .= "         </div>";
@@ -120,7 +122,7 @@ class TutoradosViewAddMeeting extends AppView {
 
 
 
-                $html .= "</div>";
+            $html .= "</div>";
 //            $html .= "    <div class=\"row\">";
 //
 //            $html .= "		<div class=\"col-xs-1 panel-title\" style='margin-left: 10px'>Número IST</div>";
@@ -259,11 +261,12 @@ class TutoradosViewAddMeeting extends AppView {
                     $html .= "<div class='row'>";
                     $html .= "    <div class='col-xs-1'></div>";
                     $html .= "    <div class='col-xs-1'>";
-                    $html .= '        <button type="submit" name="submit" class="btn btn-default">Submeter TODO</button>';
+                    $html .= '        <button type="submit" name="submit" class="btn btn-default">Adicionar Reunião</button>';
                     $html .= "    </div>";
                     $html .= "</div>";
 //			}
             $html .= "</div>";
+            $html .= "</form>";
 		}
 
         $html .= "        </div>";

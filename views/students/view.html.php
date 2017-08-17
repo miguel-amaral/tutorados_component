@@ -46,8 +46,9 @@ class TutoradosViewStudents extends AppView {
             $html .= "    <div class=\"row\">";
 
             $html .= "		<div class=\"col-xs-1 panel-title\" style='margin-left: 10px'>Número IST</div>";
-            $html .= "		<div class=\"col-xs-8 panel-title\">Nome do Aluno</div>";
+            $html .= "		<div class=\"col-xs-7 panel-title\">Nome do Aluno</div>";
             $html .= "		<div class=\"col-xs-1 \">Histórico de Reuniões</div>";
+            $html .= "		<div class=\"col-xs-1 \">Ano de Entrada</div>";
             $html .= "		<div class='col-xs-1 panel-title'></div>";
             $html .= "    </div>";
 
@@ -56,7 +57,7 @@ class TutoradosViewStudents extends AppView {
 //			$html .= "		<th>ist id</td>";
 //			$html .= "		<th>ist number</td>";
 			foreach($this->getData()["students"] as $student){
-                $html .= "    <div class=\"row\" style='margin-top: 10px'>";
+                $html .= "    <div class=\"row\" style='margin-top: 20px'>";
 
 //                $html .= "		<div class=\"col-xs-1\" >";
                 $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student["istid"]));
@@ -69,7 +70,7 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "          </div>";
 //                $html .= "      </div>";
 
-                $html .= "		<div class=\"col-xs-8\">";
+                $html .= "		<div class=\"col-xs-7\">";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Nome</span>";
                 "";
@@ -84,7 +85,23 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'> " . $student["istid"] . " </div>";
 //                $html .= "		<div class=\"col-xs-8\">" . $student["name"] . " </div>";
 ////                $html .= "		<div class=\"col-xs-1\">" . $student["attendence"] . " </div>";
-                $html .= "		<div class=\"col-xs-1\" >" . " 4/9 TODO " . " </div>";
+
+                $html .= "		<div class=\"col-xs-1\" >";
+                $html .= "          <div class=\"input-group\">";
+//                $html .= "                <span class=\"input-group-addon\"></span>";
+                $html .= "                <input readonly='readonly' id=\"historic". $student["istid"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . "TODO" . "\">";
+                $html .= "          </div>";
+                $html .= "      </div>";
+                $html .= "		<div class=\"col-xs-1\" >";
+                $html .= "          <div class=\"input-group\">";
+//                $html .= "                <span class=\"input-group-addon\"></span>";
+                $html .= "                <input readonly='readonly' id=\"entry_year". $student["istid"] ."\" type=\"text\" class=\"form-control\" name=\"entry_year\" placeholder=\"\" value=\"" . $student['entry_year'] . "\">";
+                $html .= "          </div>";
+                $html .= "      </div>";
+
+//                $html .= "		<div class=\"col-xs-1\" >" . " TODO " . " </div>";
+//                $html .= "		<div class=\"col-xs-1\" >" . $student['entry_year'] . " </div>";
+
                 $html .= "		<div class=\"col-xs-1\"><a data-toggle=\"collapse\" href=\"#expandable" . $student['istid'] . "\" aria-expanded='true' aria-controls=\"expandable" . $student['istid'] . "\">more details</a></div>";
                 $html .= "    </div >";
 
@@ -95,13 +112,13 @@ class TutoradosViewStudents extends AppView {
                 $html .= "        <div class='col-xs-5'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Email</span>";
-                $html .= "                <input id=\"email". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"email\" placeholder=\"Email do Aluno\" value=\"" . $student["email"] . "\">";
+                $html .= "                <input readonly='readonly' id=\"email". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"email\" placeholder=\"Email do Aluno\" value=\"" . $student["email"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
-                $html .= "        <div class='col-xs-3'>";
+                $html .= "        <div class='col-xs-4'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Telefone</span>";
-                $html .= "                <input id=\"telefone". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"telefone\" placeholder=\"Telefone do Aluno\" value=\"" . $student["telefone"] . "\">";
+                $html .= "                <input readonly='readonly' id=\"telefone". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"telefone\" placeholder=\"Telefone do Aluno\" value=\"" . $student["telefone"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
                 $html .= "      </div>";
@@ -111,13 +128,13 @@ class TutoradosViewStudents extends AppView {
                 $html .= "        <div class='col-xs-5'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Outro</span>";
-                $html .= "                <input id=\"outro". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"outro\" placeholder=\"Outro Contacto\" value=\"" . $student["other"] . "\">";
+                $html .= "                <input readonly='readonly' id=\"outro". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"outro\" placeholder=\"Outro Contacto\" value=\"" . $student["other"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
-                $html .= "        <div class='col-xs-3'>";
+                $html .= "        <div class='col-xs-4'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Preferencial</span>";
-                $html .= "                <input id=\"telefone". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"telefone\" placeholder=\"Contacto Preferencial\" value=\"" . $student["preferencial_contact"] . "\">";
+                $html .= "                <input readonly='readonly' id=\"telefone". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"telefone\" placeholder=\"Contacto Preferencial\" value=\"" . $student["preferencial_contact"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
                 $html .= "      </div>";
@@ -132,42 +149,47 @@ class TutoradosViewStudents extends AppView {
                 $html .= "        <div class='col-xs-3'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Nota Entrada</span>";
-                $html .= "                <input disabled id=\"entry_grade". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_grade\" placeholder=\"Nota de Entrada\" value=\"" . $student["entry_grade"] . "\">";
+                $html .= "                <input readonly='readonly' id=\"entry_grade". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_grade\" placeholder=\"Nota de Entrada\" value=\"" . $student["entry_grade"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
                 $html .= "        <div class='col-xs-2'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Fase de Entrada</span>";
-                $html .= "                <input disabled id=\"entry_phase". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_phase\" placeholder=\"Fase de entrada\" value=\"" . $student["entry_phase"] . "\">";
+                $html .= "                <input readonly='readonly' id=\"entry_phase". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_phase\" placeholder=\"Fase de entrada\" value=\"" . $student["entry_phase"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
-                $html .= "        <div class='col-xs-3'>";
+                $html .= "        <div class='col-xs-4'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Opção Número</span>";
-                $html .= "                <input disabled id=\"option_number". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"option_number\" placeholder=\"Fase de entrada\" value=\"" . $student["option_number"] . "\"f>";
+                $html .= "                <input readonly='readonly' id=\"option_number". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"option_number\" placeholder=\"Fase de entrada\" value=\"" . $student["option_number"] . "\"f>";
                 $html .= "          </div>";
                 $html .= "        </div>";
                 $html .= "      </div>";
 
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
                 $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
-                $html .= "        <div class='col-xs-5'>";
-                $html .= "              <div class=\"input-group\">";
-                $html .= "               <label style='margin-right: 20px'>Aluno Deslocado</label>";
-                $html .= '                  <label  class="radio-inline "><input type="radio" name="optradio">Sim</label>';
-                $html .= '                  <label class="radio-inline " ><input type="radio" name="optradio">Não</label>';
-                $html .= '                  <label class="radio-inline " ><input type="radio" name="optradio">TODO AUTO SELECT</label>';
-                $html .= "            </div>";
+                $html .= "        <div class='col-xs-4'>";
+                $html .= "          <div class=\"input-group\">";
+                if($student["deslocated"] === "1"){
+                    $valor = "Sim";
+                } elseif ($student["deslocated"] === "0") {
+                    $valor = "Não";
+                } else {
+                    $valor = "";
+                }
+                $html .= "                <span class=\"input-group-addon\">Aluno Deslocado</span>";
+                $html .= "                <input readonly='readonly' id=\"option_number". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"option_number\" placeholder=\"Aluno Deslocado\" value=\"" . $valor . "\"f>";
+                $html .= "          </div>";
                 $html .= "        </div>";
                 $html .= "      </div>";
                  
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
                 $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
-                $html .= "        <div class='col-xs-8'>";
+                $html .= "        <div class='col-xs-9'>";
 
                 $html .= '        <div class="form-group">';
                 $html .= '            <label for="comment">Informações Adicionais:</label>';
-                $html .= '            <textarea class="form-control" rows="5" id="comment"> '.$student["extra_info"].' </textarea>';
+                $html .= '            <textarea readonly=\'readonly\' class="form-control" rows="5" id="comment"> '.$student["extra_info"].' </textarea>';
                 $html .= '        </div>';
 
                 $html .= "        </div>";
