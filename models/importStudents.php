@@ -14,7 +14,7 @@ include_once ('controlPermissions.php');
  *
  * @since 1.0.0
  */
-class TutoradosModelAddMeeting extends AppModel {
+class TutoradosModelImportStudents extends AppModel {
 
 	/**
 	 * @var Object	The user profile data
@@ -36,13 +36,13 @@ class TutoradosModelAddMeeting extends AppModel {
         $fenixEdu = FenixEdu::getSingleton();
 
         $istId = $fenixEdu->getIstId();
-		$this->data["students"] = App::instance()->db->
+        $this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($istId);
+
+        $this->data["students"] = App::instance()->db->
             select(array("istid","name",  "ist_number","email", "telefone", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number","extra_info"))->
             from("tuturado_student ")->
             where("tutor_id=:tutor_id")->
             dispatch(array("tutor_id" => $istId));
-
-        $this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($istId);
     }
 
 	public function getData(){

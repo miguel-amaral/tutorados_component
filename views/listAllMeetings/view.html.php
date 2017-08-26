@@ -13,7 +13,7 @@ defined('__APP__8B1H9MU5QI') or die();
  *
  * @since 1.0.0
  */
-class TutoradosViewMeetings extends AppView {
+class TutoradosViewListAllMeetings extends AppView {
 
 	public function __construct($model){ parent::__construct($model); }
 
@@ -29,13 +29,13 @@ class TutoradosViewMeetings extends AppView {
         $html  ="<div class=\"collapse navbar-collapse\" role=\"tablist\" id=\"bs-example-navbar-collapse-1\">";
         $html .="    <ul class=\"nav nav-tabs\">";
         $html .="            <li ><a href=$students_link>Alunos</a></li>";
-        $html .="            <li class=active><a href=$meetings_link>Reuniões</a></li>";
+        $html .="            <li ><a href=$meetings_link>Reuniões</a></li>";
         $html .="            <li><a href=$add_meetings_link>Adicionar Reunião</a></li>";
         if($this->getData()["isTutorAdmin"]) {
             $html .="            <li ><a href=$import_students_link>Importar Alunos</a></li>";
             $html .="            <li ><a href=$output_file_link>Criar ficheiro output</a></li>";
             $html .="            <li ><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
-            $html .="            <li ><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
+            $html .="            <li class='active'><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
         }
 
         $html .="    </ul>";
@@ -46,10 +46,14 @@ class TutoradosViewMeetings extends AppView {
         $html .= "  	    <div class=\"panel-heading\">";
         $html .= "  	    	<h3 class=\"panel-title\">Lista de Reuniões</h3>";
         $html .= "  	    </div>";
-		if(sizeof($this->getData()["meetings"]) == 0){
-			$html .= "<div class=\"panel-body\">";
-			$html .= "	<h3>There are no meetings registered</h3>";
-			$html .= "</div>";
+		if(sizeof($this->getData()["isTutorAdmin"]) == 0) {
+            $html .= "<div class=\"panel-body\">";
+            $html .= "	<h3>There are no meetings registered</h3>";
+            $html .= "</div>";
+        } elseif (!$this->getData()["isTutorAdmin"]){
+            $html .= "<div class=\"panel-body\">";
+            $html .= "	<h3>Forbidden</h3>";
+            $html .= "</div>";
 		}else{
 
             $html .= "<form action=\"/index.php?com=".$_GET["com"]."&view=".$_GET["view"]."\" method=\"POST\">";

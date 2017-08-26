@@ -14,7 +14,7 @@ include_once ('controlPermissions.php');
  *
  * @since 1.0.0
  */
-class TutoradosModelMeetings extends AppModel {
+class TutoradosModelListAllMeetings extends AppModel {
 
 	/**
 	 * @var Object	The user profile data
@@ -32,41 +32,36 @@ class TutoradosModelMeetings extends AppModel {
 	public function __construct(){
 		$this->data = array("meetings" => array());
 	}
+
 	public function execute(){
         $fenixEdu = FenixEdu::getSingleton();
 
         $istId = $fenixEdu->getIstId();
         $this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($istId);
 
+        if(!$this->data["isTutorAdmin"]) {
+            return;
+        }
         $this->data["meetings"] = App::instance()->db->
             select(array("responsible_tutor","date","reunion_id","local","meio","extra_info","tutor_name"))->
             from("tuturado_reunion JOIN tuturado_tutor ON tuturado_tutor.istid=tuturado_reunion.responsible_tutor")->
-            where("responsible_tutor=:tutor_id")->
-            dispatch(array("tutor_id" => $istId));
+            where("true=true")->
+            dispatch();
 
-        $totalStudents = App::instance()->db->
-            execute("SELECT COUNT(*) as totalStudents from tuturado_student where tutor_id=:tutor_id",array("tutor_id" => $istId));
-//            select(array("COUNT(*) as totalStudents"))->
-//            from("tuturado_student")->
-//            where("tutor_id=:tutor_id")->
-//            dispatch(array("tutor_id" => $istId));
-
-//        echo("");
-        $totalStudents = (int)$totalStudents[0]["totalStudents"];
-//        var_dump($totalStudents);
-//        echo("");
-
-
-        $istId = $fenixEdu->getIstId();
-        $students = App::instance()->db->
-        select(array("istid"))->
-        from("tuturado_student ")->
-        where("tutor_id=:tutor_id")->
-        dispatch(array("tutor_id" => $istId));
+//        $istId = $fenixEdu->getIstId();
+//        $students = App::instance()->db->
+//        select(array("istid"))->
+//        from("tuturado_student ")->
+//        where("tutor_id=:tutor_id")->
+//        dispatch(array("tutor_id" => $istId));
 
 
         $counter = 0;
         foreach($this->data["meetings"] as $meeting){
+            $tutor_id = $meeting["responsible_tutor"];
+            $totalStudents = App::instance()->db-> execute("SELECT COUNT(*) as totalStudents from tuturado_student where tutor_id=:tutor_id",array("tutor_id" => $tutor_id));
+            $totalStudents = (int)$totalStudents[0]["totalStudents"];
+
             $meeting_id = $meeting["reunion_id"];
             $this->data[$meeting_id] = App::instance()->db->
                 execute("SELECT tuturado_reunion_atendence.student_id,tuturado_student.name,tuturado_reunion_atendence.extra_info, present

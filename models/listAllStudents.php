@@ -14,7 +14,7 @@ include_once ('controlPermissions.php');
  *
  * @since 1.0.0
  */
-class TutoradosModelStudents extends AppModel {
+class TutoradosModelListAllStudents extends AppModel {
 
 	/**
 	 * @var Object	The user profile data
@@ -33,14 +33,10 @@ class TutoradosModelStudents extends AppModel {
 		$this->data = array("students" => array());
 	}
 
-    public function fetchTutorStudents($tutor_id) {
+    public function fetchAllStudents() {
         $detailedStudent = new TutoradosModelDetailedStudent();
 
-        $this->data["students"] = App::instance()->db->
-        select(array("istid","name",  "ist_number","email", "telefone","entry_year", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number","extra_info"))->
-        from("tuturado_student ")->
-        where("tutor_id=:tutor_id")->
-        dispatch(array("tutor_id" => $tutor_id));
+        $this->data["students"] = App::instance()->db->execute("select tutor_name,ts.istid, name,  ist_number,email, telefone,entry_year, other, preferencial_contact, entry_grade, deslocated, entry_phase, option_number,extra_info FROM tuturado_student ts JOIN tuturado_tutor tt ON  ts.tutor_id=tt.istid" );
 
         $counter = 0;
         foreach($this->getData()["students"] as $student){
@@ -54,10 +50,12 @@ class TutoradosModelStudents extends AppModel {
         $fenixEdu = FenixEdu::getSingleton();
 
         $istId = $fenixEdu->getIstId();
-        $this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($istId);
+        $isTutorAdmin = ControlPermissions::isTutorAdmin($istId);
+        $this->data["isTutorAdmin"] = $isTutorAdmin;
 
-        $this->fetchTutorStudents($istId);
-
+        if($isTutorAdmin) {
+            $this->fetchAllStudents();
+        }
 
     }
 

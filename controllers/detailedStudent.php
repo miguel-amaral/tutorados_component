@@ -33,12 +33,15 @@ class TutoradosControllerDetailedStudent extends AppController {
             $outro          = $_POST["outro"];
             $preferencial   = $_POST["preferencial"];
             $observations   = $_POST["observations"];
+            $entry_grade    = $_POST["entry_grade"];
+            $option_number  = $_POST["option_number"];
+            $entry_phase    = $_POST["entry_phase"];
             if(isset($_POST["deslocated"])){
                 $deslocated = 1;
             } else {
                 $deslocated = 0;
             }
-            $this->updateStudent($IST_ID,$name,$email,$telefone,$outro,$preferencial,$observations, $deslocated);
+            $this->updateStudent($IST_ID,$name,$email,$telefone,$outro,$preferencial,$observations, $deslocated,$entry_grade,$entry_phase,$option_number);
 
             if(isset($_POST["meetings"])){
                 foreach ($_POST["meetings"] as $meeting_id) {
@@ -60,7 +63,7 @@ class TutoradosControllerDetailedStudent extends AppController {
         return true;
 	}
 
-	private function updateStudent($studentID, $name, $email, $telefone, $other,$preferencial,$observations,$deslocated) {
+	private function updateStudent($studentID, $name, $email, $telefone, $other,$preferencial,$observations,$deslocated,$entry_grade,$entry_phase,$option_number) {
 	                    App::instance()->db->
                         update("tuturado_student")->
                         set(array(
@@ -70,7 +73,10 @@ class TutoradosControllerDetailedStudent extends AppController {
                                 array("name" => "preferencial_contact"  , "value" => ":preferencial_contact"),
                                 array("name" => "deslocated"            , "value" => ":deslocated"),
                                 array("name" => "other"                 , "value" => ":other"),
-                                array("name" => "extra_info"            , "value" => ":extra_info"),))->
+                                array("name" => "extra_info"            , "value" => ":extra_info"),
+                                array("name" => "entry_grade"            , "value" => ":entry_grade"),
+                                array("name" => "entry_phase"            , "value" => ":entry_phase"),
+                                array("name" => "option_number"            , "value" => ":option_number"),))->
                         where("istid=:istid")->
                         dispatch(array(
                                 "istid"                 => $studentID,
@@ -80,6 +86,9 @@ class TutoradosControllerDetailedStudent extends AppController {
                                 "preferencial_contact"  => $preferencial,
                                 "deslocated"            => $deslocated,
                                 "other"                 => $other,
+                                "entry_grade"           => $entry_grade,
+                                "entry_phase"           => $entry_phase,
+                                "option_number"         => $option_number,
                                 "extra_info"            => $observations,),false);
     }
 

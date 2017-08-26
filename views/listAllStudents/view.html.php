@@ -13,7 +13,7 @@ defined('__APP__8B1H9MU5QI') or die();
  *
  * @since 1.0.0
  */
-class TutoradosViewStudents extends AppView {
+class TutoradosViewListAllStudents extends AppView {
 
 	public function __construct($model){ parent::__construct($model); }
 
@@ -25,16 +25,16 @@ class TutoradosViewStudents extends AppView {
         $list_all_students_link = App::instance()->buildURL("com_tutorados", "listAllStudents");
         $list_all_meetings_link = App::instance()->buildURL("com_tutorados", "listAllMeetings");
         $output_file_link = App::instance()->buildURL("com_tutorados", "createOutputFile",array("file"=> true));
-        
+
         $html  ="<div class=\"collapse navbar-collapse\" role=\"tablist\" id=\"bs-example-navbar-collapse-1\">";
         $html .="    <ul class=\"nav nav-tabs\">";
-        $html .="            <li class=active><a href=$students_link>Alunos</a></li>";
+        $html .="            <li ><a href=$students_link>Alunos</a></li>";
         $html .="            <li><a href=$meetings_link>Reuniões</a></li>";
         $html .="            <li><a href=$add_meetings_link>Adicionar Reunião</a></li>";
         if($this->getData()["isTutorAdmin"]) {
             $html .="            <li ><a href=$import_students_link>Importar Alunos</a></li>";
             $html .="            <li ><a href=$output_file_link>Criar ficheiro output</a></li>";
-            $html .="            <li ><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
+            $html .="            <li class='active'><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
             $html .="            <li ><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
         }
         $html .="    </ul>";
@@ -48,14 +48,15 @@ class TutoradosViewStudents extends AppView {
 		$html .= "  	</div>";
 		if(sizeof($this->getData()["students"]) == 0){
 			$html .= "<div class=\"panel-body\">";
-			$html .= "	<h3>You have no students associated</h3>";
+			$html .= "	<h3>No Students or Forbidden</h3>";
 			$html .= "</div>";
 		}else{
 //            $html .= "<div class=\"panel-body\" >";
-            $html .= "    <div class=\"row\" style='margin-top: 10px'>";
+            $html .= "    <div class=\"row\" style='margin:auto;margin-top: 10px'>";
 
-            $html .= "		<div class=\"text-center col-xs-1 panel-title\" style='margin-left: 10px'>Número IST</div>";
-            $html .= "		<div class=\"text-center col-xs-7 panel-title\">Nome do Aluno</div>";
+            $html .= "		<div class=\"text-center col-xs-1 panel-title\" >Número IST</div>";
+            $html .= "		<div class=\"text-center col-xs-4 panel-title\">Nome do Aluno</div>";
+            $html .= "		<div class=\"text-center col-xs-4 panel-title\">Nome do Tutor</div>";
             $html .= "		<div class=\"text-center col-xs-1 \">Histórico de Reuniões</div>";
             $html .= "		<div class=\"text-center col-xs-1 \">Ano de Entrada</div>";
             $html .= "		<div class='col-xs-1 panel-title'></div>";
@@ -71,7 +72,7 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "		<div class=\"col-xs-1\" >";
                 $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student["istid"]));
 
-                $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'> <a href='$url'>" . $student["istid"] . " </a></div>";
+                $html .= "		<div class=\"col-xs-1 text-center\" > <a href='$url'>" . $student["istid"] . " </a></div>";
 
 //                $html .= "          <div class=\"input-group\">";
 //                $html .= "                <span class=\"input-group-addon\">IST ID</span>";
@@ -79,11 +80,17 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "          </div>";
 //                $html .= "      </div>";
 
-                $html .= "		<div class=\"col-xs-7\">";
+                $html .= "		<div class=\"col-xs-4\">";
                 $html .= "          <div class=\"input-group\">";
-                $html .= "                <span class=\"input-group-addon\">Nome</span>";
+                $html .= "                <span class=\"input-group-addon\">Aluno</span>";
                 "";
-                $html .= "                <input readonly='readonly' id=\"name". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"IST ID\" placeholder=\"Nome Do Aluno\" value=\"".$student["name"]."\">";
+                $html .= "                <input readonly='readonly' id=\"student_name". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"IST ID\" placeholder=\"Nome Do Aluno\" value=\"".$student["name"]."\">";
+                $html .= "          </div>";
+                $html .= "      </div>";
+                $html .= "		<div class=\"col-xs-4\">";
+                $html .= "          <div class=\"input-group\">";
+                $html .= "                <span class=\"input-group-addon\">Tutor</span>";
+                $html .= "                <input readonly='readonly' id=\"tutor_name". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"tutor_name\" placeholder=\"Nome Do Aluno\" value=\"".$student["tutor_name"]."\">";
                 $html .= "          </div>";
                 $html .= "      </div>";
 //                $html .= "		<div class=\"col-xs-1\"></div>";
@@ -111,13 +118,13 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "		<div class=\"col-xs-1\" >" . " TODO " . " </div>";
 //                $html .= "		<div class=\"col-xs-1\" >" . $student['entry_year'] . " </div>";
 
-                $html .= "		<div class=\"col-xs-1\"><a data-toggle=\"collapse\" href=\"#expandable" . $student['istid'] . "\" aria-expanded='true' aria-controls=\"expandable" . $student['istid'] . "\">more details</a></div>";
+                $html .= "		<div class=\"col-xs-1\"><a data-toggle=\"collapse\" href=\"#expandable" . $student['istid'] . "\" aria-expanded='true' aria-controls=\"expandable" . $student['istid'] . "\">Details</a></div>";
                 $html .= "    </div >";
 
 //              more details of the student (hidden)
                 $html .= "    <div class=\"collapse\" style=\"margin-top: 10px\" id=\"expandable" . $student['istid'] . "\">";
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
+                $html .= "        <div class='col-xs-1' ></div>";
                 $html .= "        <div class='col-xs-5'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Email</span>";
@@ -133,7 +140,7 @@ class TutoradosViewStudents extends AppView {
                 $html .= "      </div>";
 
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
+                $html .= "        <div class='col-xs-1' ></div>";
                 $html .= "        <div class='col-xs-5'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Outro</span>";
@@ -154,7 +161,7 @@ class TutoradosViewStudents extends AppView {
 
 
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
+                $html .= "        <div class='col-xs-1' ></div>";
                 $html .= "        <div class='col-xs-3'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Nota Entrada</span>";
@@ -176,7 +183,7 @@ class TutoradosViewStudents extends AppView {
                 $html .= "      </div>";
 
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
+                $html .= "        <div class='col-xs-1' ></div>";
                 $html .= "        <div class='col-xs-5'>";
                 $html .= "          <div class=\"input-group\">";
                 if($student["deslocated"] === "1"){
@@ -193,7 +200,7 @@ class TutoradosViewStudents extends AppView {
                 $html .= "      </div>";
                  
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
+                $html .= "        <div class='col-xs-1' ></div>";
                 $html .= "        <div class='col-xs-9'>";
 
                 $html .= '        <div class="form-group">';
@@ -212,10 +219,8 @@ class TutoradosViewStudents extends AppView {
             $html .= "      <div class=\"row\" style='margin-top: 10px'>";
             $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
             $html .= "      </div>";
-
             $html .= "</div>";
 		}
-
         $html .= "        </div>";
         $html .= "    </div>";
         $html .= "</div>";

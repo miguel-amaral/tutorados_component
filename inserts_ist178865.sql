@@ -61,8 +61,10 @@ INSERT INTO tuturado_reunion_atendence (reunion_id,student_id,extra_info,present
 (3,'ist123459','ola 123 adeus',0),
 (3,'ist123460','ola 123 adeus',1);
 
+DELETE FROM menu_item WHERE name='Tutorado' AND component='com_tutorados';
 INSERT INTO menu_item (name,options, component, view, menu_id, enable, access) VALUES
 ('Tutorado','','com_tutorados','students',1,1,1),
 ('Tutorado','','com_tutorados','meetings',1,0,1),
 ('Tutorado','','com_tutorados','addMeeting',1,0,1),
-('Tutorado','','com_tutorados','detailedStudent',1,0,1);
+('Tutorado','','com_tutorados','detailedStudent',1,0,1),
+('Tutorado','','com_tutorados','insertStudents',1,0,1);

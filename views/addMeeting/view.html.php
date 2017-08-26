@@ -21,6 +21,10 @@ class TutoradosViewAddMeeting extends AppView {
         $students_link = App::instance()->buildURL("com_tutorados", "students");
         $meetings_link = App::instance()->buildURL("com_tutorados", "meetings");
         $add_meetings_link = App::instance()->buildURL("com_tutorados", "addMeeting");
+        $import_students_link = App::instance()->buildURL("com_tutorados", "importStudents");
+        $list_all_students_link = App::instance()->buildURL("com_tutorados", "listAllStudents");
+        $list_all_meetings_link = App::instance()->buildURL("com_tutorados", "listAllMeetings");
+        $output_file_link = App::instance()->buildURL("com_tutorados", "createOutputFile",array("file"=> true));
 
 
         $html  ="<div class=\"collapse navbar-collapse\" role=\"tablist\" id=\"bs-example-navbar-collapse-1\">";
@@ -29,6 +33,13 @@ class TutoradosViewAddMeeting extends AppView {
         $html .="            <li><a href=$students_link>Alunos</a></li>";
         $html .="            <li><a href=$meetings_link>Reuniões</a></li>";
         $html .="            <li class=active><a href=$add_meetings_link>Adicionar Reunião</a></li>";
+        if($this->getData()["isTutorAdmin"]) {
+            $html .="            <li ><a href=$import_students_link>Importar Alunos</a></li>";
+            $html .="            <li ><a href=$output_file_link>Criar ficheiro output</a></li>";
+            $html .="            <li ><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
+            $html .="            <li ><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
+        }
+
         $html .="    </ul>";
 
 
@@ -43,6 +54,17 @@ class TutoradosViewAddMeeting extends AppView {
 			$html .= "	<h3>You have no students associated</h3>";
 			$html .= "</div>";
 		}else{
+			$html .= "<script>";
+            $html .= ' function validateForm() { ';
+            $html .= '     return false; ';
+//            $html .= '     var x = document.forms["myForm"]["fname"].value; ';
+//            $html .= '     if (x == "") { ';
+//            $html .= '         alert("Name must be filled out"); ';
+//            $html .= '         return false; ';
+//            $html .= '     } ';
+            $html .= ' } ';
+			$html .= "</script>";
+
 //            $html .= "<div class=\"panel-body\" >";
             $html .= "<form action=\"/index.php?com=".$_GET["com"]."&view=meetings\" method=\"POST\">";
             $html .= '<div class="container">';
@@ -53,22 +75,30 @@ class TutoradosViewAddMeeting extends AppView {
             $html .= '        <div class="col-xs-5 form-group">';
             $html .= "          <div class=\"input-group\">";
             $html .= "                <span class=\"input-group-addon\">Data</span>";
-            $html .= '                <input required name="new_meeting_date" type="text" id="datetime12" class="form-control" data-format="DD-MM-YYYY h:mm a" data-template="DD / MM / YYYY     hh : mm" name="datetime" value="'.date("d-m-Y G:i").'">';
+            $validity_message = 'Formato Inválido. Por favor use DD-MM-YYYY h:mm (exemplo: 26-08-2017 15:30) ';
+            $html .= '                <input onkeyup="this.onchange();" onchange="try{setCustomValidity(\'\')}catch(e){}" oninvalid="setCustomValidity(\''.$validity_message.'\')" required name="new_meeting_date" type="text" id="new_meeting_date" class="form-control" pattern="\d{1,2}-\d{1,2}-\d{4}[ ]+\d{1,2}[:]{1}\d{2}[ ]*" data-format="DD-MM-YYYY h:mm" data-template="DD / MM / YYYY     hh : mm" name="datetime" value="'.date("d-m-Y G:i").'">';
             $html .= "          </div>";
             $html .= '        </div>';
 
-            $html .= '        <script>';
-            $html .= '        $(function(){';
-            $html .= "            $('#datetime12').combodate();  ";
-            $html .= '        });';
-            $html .= '        </script>';
+//            $html .= '        <script>';
+//            $html .= '        $(function(){';
+//            $html .= "            $('#new_meeting_date').combodate();  ";
+//            $html .= '        });';
+//            $html .= '        </script>';
             $html .= '    </div>';
+
+//            $html .= '        <script>';
+//            $html .= "              var date_input = document.getElementById('new_meeting_date'); ";
+//            $html .= "              input.oninvalid = function(event) { ";
+//            $html .= "                  event.target.setCustomValidity('Username should only contain lowercase letters. e.g. john'); ";
+//            $html .= "              } ";
+//            $html .= '        </script>';
 
             $html .= "     <div class=\"row\">";
             $html .= '        <div class="col-xs-5 form-group">';
             $html .= "          <div class=\"input-group\">";
             $html .= "                <span class=\"input-group-addon\">Local</span>";
-            $html .= "                <input required name='new_meeting_place' id=\"place\" type=\"text\" class=\"form-control\" name=\"Local\" placeholder=\"Local onde foi/será a reunião\" value=\"\">";
+            $html .= "                <input  required name='new_meeting_place' id=\"place\" type=\"text\" class=\"form-control\" name=\"Local\" placeholder=\"Local onde foi/será a reunião\" value=\"\">";
             $html .= "          </div>";
             $html .= '        </div>';
             $html .= "     </div>";
@@ -97,8 +127,11 @@ class TutoradosViewAddMeeting extends AppView {
                 $html .= "		<input type='hidden' name='new_meeting_students[]' value='".$student["istid"]."'>";
 
                 $html .= "         <div class=\"row\">";
+                $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student["istid"]));
 
-                $html .= "            <div class='col-xs-1'>".$student["istid"]."</div>";
+                $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'> <a href='$url'>" . $student["istid"] . " </a></div>";
+
+//                $html .= "            <div class='col-xs-1'>".$student["istid"]."</div>";
                 $html .= "            <div class='col-xs-6'>".$student["name"]."</div>";
                 $html .= '            <div class="checkbox col-xs-2">';
                 $html .= '                <label><input name="new_meeting_present'.$student["istid"].'" type="checkbox" >Presente</label>';
@@ -261,7 +294,7 @@ class TutoradosViewAddMeeting extends AppView {
                     $html .= "<div class='row'>";
                     $html .= "    <div class='col-xs-1'></div>";
                     $html .= "    <div class='col-xs-1'>";
-                    $html .= '        <button type="submit" name="submit" class="btn btn-default">Adicionar Reunião</button>';
+                    $html .= '        <button type="submit" name="submit" class="btn btn-primary">Adicionar Reunião</button>';
                     $html .= "    </div>";
                     $html .= "</div>";
 //			}

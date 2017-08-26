@@ -7,6 +7,7 @@
  */
 
 defined('__APP__8B1H9MU5QI') or die();
+include_once ('controlPermissions.php');
 
 /**
  * Profile model class for Users
@@ -38,18 +39,25 @@ class TutoradosModelDetailedStudent extends AppModel {
         else
             $studentID = "ERROR";
         $istId = $fenixEdu->getIstId();
-		$this->data["student"] = App::instance()->db->
+        $this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($istId);
+
+        if($this->data["isTutorAdmin"]) {
+            $this->data["student"] = App::instance()->db->
             select(array("istid","deslocated","name", "extra_info", "ist_number","email", "telefone", "other", "preferencial_contact","entry_year" ,"entry_grade", "deslocated", "entry_phase", "option_number"))->
             from("tuturado_student ")->
-            where("tutor_id=:tutor_id AND istid=:studentID")->
-            dispatch(array("tutor_id" => $istId,"studentID"=> $studentID));
+            where("istid=:studentID")->
+            dispatch(array("studentID"=> $studentID));
 
-		$this->data["meetings"] = App::instance()->db->
-            execute("SELECT tuturado_reunion_atendence.reunion_id, tuturado_reunion_atendence.present, tuturado_reunion_atendence.extra_info, tuturado_reunion.date, tuturado_reunion.local, tuturado_reunion.meio
-                    FROM tuturado_reunion JOIN tuturado_reunion_atendence ON tuturado_reunion.reunion_id=tuturado_reunion_atendence.reunion_id
-                    WHERE student_id=:student_id
-                    ORDER BY date DESC ",array("student_id"=>$studentID));
+        } else {
+            $this->data["student"] = App::instance()->db->
+                select(array("istid","deslocated","name", "extra_info", "ist_number","email", "telefone", "other", "preferencial_contact","entry_year" ,"entry_grade", "deslocated", "entry_phase", "option_number"))->
+                from("tuturado_student ")->
+                where("tutor_id=:tutor_id AND istid=:studentID")->
+                dispatch(array("tutor_id" => $istId,"studentID"=> $studentID));
 
+        }
+
+		$this->data["meetings"] = $this->getStudentMeetings($studentID);
 		$this->data["number_present"] = 0;
 		$index = 0;
 		foreach ($this->data["meetings"] as $meeting){
@@ -75,8 +83,33 @@ class TutoradosModelDetailedStudent extends AppModel {
         $this->data["percentage_attended"] = (string)((100*$this->data["number_present"])/ $this->data["total_reunions"]);
     }
 
-    public function getPercentageAttended() {
+    public function getNumberMeetingsPresent($meetings,$studentID) {
+	    $number_present = 0;
 
+        foreach ($meetings as $meeting){
+            if($meeting["present"] == "1" ) {
+                $number_present++;
+            }
+        }
+        return $number_present;
+
+    }
+
+    public function getStudentMeetings($studentID) {
+        return App::instance()->db->
+        execute("SELECT tuturado_reunion_atendence.reunion_id, tuturado_reunion_atendence.present, tuturado_reunion_atendence.extra_info, tuturado_reunion.date, tuturado_reunion.local, tuturado_reunion.meio
+                    FROM tuturado_reunion JOIN tuturado_reunion_atendence ON tuturado_reunion.reunion_id=tuturado_reunion_atendence.reunion_id
+                    WHERE student_id=:student_id
+                    ORDER BY date DESC ",array("student_id"=>$studentID));
+    }
+
+    public function getPercentageMeetingsAttended($studentID) {
+	    $meetings = $this->getStudentMeetings($studentID);
+        $number_present = $this->getNumberMeetingsPresent($meetings,$studentID);
+        if(sizeof($meetings) == 0){
+            return "NA" . "%";
+        }
+        return (string)((100*$number_present)/ sizeof($meetings)) . "%";
     }
 
 	public function getData(){

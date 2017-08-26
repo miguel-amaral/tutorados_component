@@ -21,12 +21,23 @@ class TutoradosViewDetailedStudent extends AppView {
         $students_link = App::instance()->buildURL("com_tutorados", "students");
         $meetings_link = App::instance()->buildURL("com_tutorados", "meetings");
         $add_meetings_link = App::instance()->buildURL("com_tutorados", "addMeeting");
+        $import_students_link = App::instance()->buildURL("com_tutorados", "importStudents");
+        $list_all_students_link = App::instance()->buildURL("com_tutorados", "listAllStudents");
+        $list_all_meetings_link = App::instance()->buildURL("com_tutorados", "listAllMeetings");
+        $output_file_link = App::instance()->buildURL("com_tutorados", "createOutputFile",array("file"=> true));
 
         $html  ="<div class=\"collapse navbar-collapse\" role=\"tablist\" id=\"bs-example-navbar-collapse-1\">";
         $html .="    <ul class=\"nav nav-tabs\">";
         $html .="            <li><a href=$students_link>Alunos</a></li>";
         $html .="            <li><a href=$meetings_link>Reuniões</a></li>";
         $html .="            <li><a href=$add_meetings_link>Adicionar Reunião</a></li>";
+        if($this->getData()["isTutorAdmin"]) {
+            $html .="            <li ><a href=$import_students_link>Importar Alunos</a></li>";
+            $html .="            <li ><a href=$output_file_link>Criar ficheiro output</a></li>";
+            $html .="            <li ><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
+            $html .="            <li ><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
+        }
+
         $html .="    </ul>";
         $html .= "</div>";
 
@@ -80,8 +91,14 @@ class TutoradosViewDetailedStudent extends AppView {
 //                $html .= "    <h3 >&nbsp;</h3>";
                 $html .= '  <div class="col-xs-2 ">';
                 $html .= '    <div class="thumbnail" style="margin-left:10px;margin-top: 30px">';
-                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$student['istid'].'">';
-                $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$student['istid'].'" alt="Nature" style="">';
+
+                $id_for_pic = $student['istid'];
+                if (strpos($id_for_pic, 'ist1') === false) {
+                    $id_for_pic = "ist1" . $id_for_pic;
+                }
+
+                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'">';
+                $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
                 $html .= '      </a>';
                 $html .= '    </div>';
                 $html .= '  </div>';
@@ -146,24 +163,62 @@ class TutoradosViewDetailedStudent extends AppView {
                 $html .= "        <div class='col-xs-4' style='margin-left: 10px'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Nota Entrada</span>";
-                $html .= "                <input readonly='readonly' id=\"entry_grade". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_grade\" placeholder=\"Nota de Entrada\" value=\"" . $student["entry_grade"] . "\">";
+                $html .= "                <input id=\"entry_grade". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_grade\" placeholder=\"Nota de Entrada\" value=\"" . $student["entry_grade"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
 //                $html .= "        <div class='col-xs-3'></div>";
                 $html .= "        <div class='col-xs-3'>";
-                $html .= "          <div class=\"input-group\">";
-                $html .= "                <span class=\"input-group-addon\">Fase de Entrada</span>";
-                $html .= "                <input readonly='readonly' id=\"entry_phase". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_phase\" placeholder=\"Fase de entrada\" value=\"" . $student["entry_phase"] . "\">";
-                $html .= "          </div>";
+
+                $html .= '            <div class="input-group">';
+                $html .= "               <span class=\"input-group-addon\">Fase de Entrada</span>";
+                $html .= '              <select class="form-control" id="entry_phase" name="entry_phase">';
+                $one = ($student["entry_phase"] === "1");
+                $two = ($student["entry_phase"] === "2");
+                $three = ($student["entry_phase"] === "3");
+                if($one or $two or $three){
+                    $none = true;
+                } else {
+                    $none = false;
+                }
+                $html .= '                <option '.($none ?"selected":"").' value=" " >Fase de Entrada</option>';
+                $html .= '                <option '.($one ?"selected":"").' value="1" >1ª</option>';
+                $html .= '                <option '.($two ?"selected":"").' value="2" >2ª</option>';
+                $html .= '                <option '.($three ?"selected":"").' value="3" >3ª</option>';
+                $html .= '              </select>';
+                $html .= '            </div>';
+
+//                $html .= "          <div class=\"input-group\">";
+//                $html .= "                <span class=\"input-group-addon\">Fase de Entrada</span>";
+//                $html .= "                <input id=\"entry_phase". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_phase\" placeholder=\"Fase de entrada\" value=\"" . $student["entry_phase"] . "\">";
+//                $html .= "          </div>";
                 $html .= "        </div>";
                 $html .= "      </div>";
 
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
                 $html .= "        <div class='col-xs-4' style='margin-left: 10px'>";
-                $html .= "          <div class=\"input-group\">";
-                $html .= "                <span class=\"input-group-addon\">Opção Número</span>";
-                $html .= "                <input readonly='readonly' id=\"option_number". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"option_number\" placeholder=\"Fase de entrada\" value=\"" . $student["option_number"] . "\">";
-                $html .= "          </div>";
+                $html .= '            <div class="input-group">';
+                $html .= "               <span class=\"input-group-addon\">Opção Número</span>";
+                $html .= '              <select class="form-control" id="option_number" name="option_number">';
+                $one = ($student["option_number"] === "1");
+                $two = ($student["option_number"] === "2");
+                $three = ($student["option_number"] === "3");
+                $four = ($student["option_number"] === "4");
+                $five = ($student["option_number"] === "5");
+                $six = ($student["option_number"] === "6");
+                if($one or $two or $three or $four or $five or $six){
+                    $none = true;
+                } else {
+                    $none = false;
+                }
+                $html .= '                <option '.($none ?"selected":"").' value="" >Opção Número</option>';
+                $html .= '                <option '.($one ?"selected":"").' value="1" >1ª</option>';
+                $html .= '                <option '.($two ?"selected":"").' value="2" >2ª</option>';
+                $html .= '                <option '.($three ?"selected":"").' value="3" >3ª</option>';
+                $html .= '                <option '.($four ?"selected":"").' value="4" >4ª</option>';
+                $html .= '                <option '.($five ?"selected":"").' value="5" >5ª</option>';
+                $html .= '                <option '.($six ?"selected":"").' value="6" >6ª</option>';
+                $html .= '              </select>';
+                $html .= '            </div>';
                 $html .= "        </div>";
 //                $html .= "        <div class='col-xs-3'></div>";
                 $html .= "        <div class='col-xs-3'>";
@@ -230,7 +285,7 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .= "<div class='row'>";
             $html .= "    <div class='col-xs-1' style='margin-top: 10px;'  ></div>";
             $html .= "    <div class='col-xs-10' style='margin-left: 10px' >";
-            $html .= '        <button type="submit" name="submit" class="btn btn-default">Guardar Alterações</button>';
+            $html .= '        <button type="submit" name="submit" class="btn btn-primary">Guardar Alterações</button>';
             $html .= "    </div>";
             $html .= "</div>";
             $html .= "<div class=\"tab-content\" style=\"margin-top:10px\">";
@@ -309,7 +364,7 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .= "<div class='row'>";
             $html .= "    <div class='col-xs-1' style='margin-top: 10px;'  ></div>";
             $html .= "    <div class='col-xs-10' style='margin-left: 10px' >";
-            $html .= '        <button type="submit" name="submit" class="btn btn-default">Guardar Alterações</button>';
+            $html .= '        <button type="submit" name="submit" class="btn btn-primary">Guardar Alterações</button>';
             $html .= "    </div>";
             $html .= "</div>";
             $html .= "</form>";

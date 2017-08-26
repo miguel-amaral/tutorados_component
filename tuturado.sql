@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS  tuturado_reunion (
 
     extra_info TEXT,
 
+    time_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+
     UNIQUE KEY (responsible_tutor,date,local,meio)
 );
 --drop table tuturado_student;
