@@ -16,6 +16,9 @@ defined('__APP__8B1H9MU5QI') or die();
  */
 class TutoradosControllerImportStudents extends AppController {
 
+    private $good = 0;
+    private $bads = array();
+
 	/**
 	 * Execute the controller
 	 *
@@ -30,6 +33,14 @@ class TutoradosControllerImportStudents extends AppController {
             $this->parseFile();
         }
 	}
+
+	private function goodLine($lineNR) {
+	    $this->good += 1;
+
+    }
+    private function badLine($lineNR,$Row) {
+        array_push($this->bads,array($lineNR,$Row));
+    }
 
 	private function parseFile()
     {
@@ -48,18 +59,36 @@ class TutoradosControllerImportStudents extends AppController {
         $Reader = new SpreadsheetReader($tmp . "." . $ext);
         $Sheets = $Reader->Sheets();
 
+        $lineNR = 0;
+
         foreach ($Sheets as $Index => $Name) {
 
             $Reader->ChangeSheet($Index);
             foreach ($Reader as $Row) {
-//                var_dump($Row);
-//                echo ("<br><br>");
                 if(in_array($Row[0], array("Tutor-Username","Tutor-Nome","Tutorando-Nº","Tutorando-Nome","Tutorando-Telemóvel","Tutorando-Email"))) continue;
+                $lineNR += 1;
 
+                if(sizeof($Row) < 6) {
+                    $this->badLine($lineNR,$Row);
+                }
                 App::instance()->db->insert("tuturado_tutor")->
                     fields(array("istid", "tutor_name",))->
                     values(array(":istid", ":tutor_name",))->
                     dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
+
+//                if($lineNR % 5 == 0){
+//
+//                    $confirmation_tutor = App::instance()->db->select(array("istid","tutor_name"))->
+//                        from("tuturado_tutor")->
+//                        where("istid=:istid AND tutor_name=:tutor_name")->
+//                        dispatch(array("istid" => $Row[0], "tutor_name" => "empty"));
+//                } else {
+                $confirmation_tutor = App::instance()->db->select(array("istid", "tutor_name"))->
+                    from("tuturado_tutor")->
+                    where("istid=:istid AND tutor_name=:tutor_name")->
+                    dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
+//                }
+
 
                 App::instance()->db->insert("tuturado_student")->
                     fields(array("istid", "name","email","tutor_id"))->
@@ -69,11 +98,30 @@ class TutoradosControllerImportStudents extends AppController {
 //                    values(array(":istid", ":name" ,":email",":tutor_id",":telefone"))->
 //                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5],"telefone" => $Row[4]));
 
+                $confirmation_aluno = App::instance()->db->select(array("istid","name","email","tutor_id"))->
+                    from("tuturado_student")->
+                    where("istid=:istid AND name=:name AND email=:email AND tutor_id=:tutor_id")->
+                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5]));
 
-//                if (!in_array($Row[0], array("LEIC-A", "LEIC-T", "MEIC-A", "MEIC-T", "METI", "MERC"))) continue;
 
+                if(sizeof($confirmation_tutor) > 0 AND sizeof($confirmation_aluno) > 0) {
+                    $this->goodLine($lineNR);
+                } else {
+                    $this->badLine($lineNR,$Row);
+                }
             }
         }
+        $message = "Número de Linhas " . $lineNR;
+        App::instance()->messages->addInfo($message);
+
+        $message = "Com sucesso " . $this->good;
+        App::instance()->messages->addInfo($message);
+        foreach ($this->bads as $bad) {
+            $message = "Erro na linha nº" . $bad[0] . " LINHA: " . implode(" : ",$bad[1]);
+            App::instance()->messages->addDanger($message);
+        }
+
+
     }
 
 	/**
