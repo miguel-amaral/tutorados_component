@@ -17,6 +17,7 @@ class ControlPermissions {
 
 //$this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($tutor_id);
     public function isTutorAdmin($istID) {
-        return true;
+        $allowed = array("ist178865","ist175741");
+        return in_array($istID,$allowed);
     }
 }
