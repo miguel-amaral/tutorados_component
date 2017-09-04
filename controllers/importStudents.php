@@ -44,9 +44,9 @@ class TutoradosControllerImportStudents extends AppController {
 
 	private function parseFile()
     {
+            //"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            //"application/vnd.ms-excel",
         if (!in_array($_FILES["students_file"]["type"], array(
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "application/vnd.ms-excel",
             "text/csv"
         ))) {
             App::instance()->messages->addWarning
@@ -65,7 +65,7 @@ class TutoradosControllerImportStudents extends AppController {
 
             $Reader->ChangeSheet($Index);
             foreach ($Reader as $Row) {
-                if(in_array($Row[0], array("Tutor-Username","Tutor-Nome","Tutorando-Nº","Tutorando-Nome","Tutorando-Telemóvel","Tutorando-Email"))) continue;
+                if(in_array($Row[0], array("Tutor-Username","Tutor-Nome","Tutorando-Nº","Tutorando-Nome","Tutorando-Telemóvel","Tutorando-Email","Ano-Entrada"))) continue;
                 $lineNR += 1;
 
                 if(sizeof($Row) < 6) {
@@ -89,19 +89,19 @@ class TutoradosControllerImportStudents extends AppController {
                     dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
 //                }
 
-
+                
                 App::instance()->db->insert("tuturado_student")->
-                    fields(array("istid", "name","email","tutor_id"))->
-                    values(array(":istid", ":name" ,":email",":tutor_id",))->
-                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5]));
+                    fields(array("istid", "name", "email", "tutor_id","entry_year"))->
+                    values(array(":istid", ":name" ,":email",":tutor_id",":entry_year"))->
+                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5],"entry_year" => $Row[6]));
 //                    fields(array("istid", "name","email","tutor_id","telefone"))->
 //                    values(array(":istid", ":name" ,":email",":tutor_id",":telefone"))->
 //                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5],"telefone" => $Row[4]));
 
-                $confirmation_aluno = App::instance()->db->select(array("istid","name","email","tutor_id"))->
+                $confirmation_aluno = App::instance()->db->select(array("istid","name","email","tutor_id","entry_year"))->
                     from("tuturado_student")->
-                    where("istid=:istid AND name=:name AND email=:email AND tutor_id=:tutor_id")->
-                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5]));
+                    where("istid=:istid AND name=:name AND email=:email AND tutor_id=:tutor_id AND entry_year=:entry_year")->
+                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5], "entry_year" => $Row[6]));
 
 
                 if(sizeof($confirmation_tutor) > 0 AND sizeof($confirmation_aluno) > 0) {

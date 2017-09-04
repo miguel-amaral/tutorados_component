@@ -57,7 +57,7 @@ class TutoradosViewImportStudents extends AppView {
 			$html .= '	<div class="row">';
 			$html .= '	    <input type="hidden" name="update_tutorado">';
 			$html .= '	    <div class="form-group">';
-			$html .= '	    	<label class="col-xs-2 control-label">Ficheiro</label>';
+			$html .= '	    	<label class="col-xs-2 control-label">Ficheiro (CSV only)</label>';
 			$html .= '	    	<div class="col-xs-8">';
 			$html .= '	    		<input name="students_file" type="file" class="form-control">';
 			$html .= '	    	</div>';
