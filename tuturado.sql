@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS tuturado_student(
     deslocated BOOLEAN,
     entry_phase int,
     option_number int,
-    entry_year int,
+    entry_year VARCHAR(20),
 
     tutor_id VARCHAR(255),
     FOREIGN KEY (tutor_id) REFERENCES tuturado_tutor (istid) ON DELETE RESTRICT ON UPDATE CASCADE,
