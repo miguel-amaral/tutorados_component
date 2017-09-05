@@ -157,12 +157,12 @@ class TutoradosViewMeetings extends AppView {
                     $html .= '        <div class="checkbox col-xs-2">';
                     $html .= '            <label><input name="'.$student_in_meeting["student_id"].'_present_in_meeting_'.$meeting["reunion_id"].'" type="checkbox" ' . (($student_in_meeting["present"] == "1" ) ? "checked" : " " ). '>Present</label>';
                     $html .= '        </div>';
-                    $html .= "        <div class='col-xs-2'><a  data-toggle=\"collapse\" href=\"#expandable" . $student_in_meeting["student_id"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student_in_meeting["student_id"] . "\">Comentário Individual</a></div>";
+                    $html .= "        <div class='col-xs-2'><a  data-toggle=\"collapse\" href=\"#".$meeting["reunion_id"]."expandable" . $student_in_meeting["student_id"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student_in_meeting["student_id"] . "\">Comentário Individual</a></div>";
 
                     $html .= "      </div >";
 
 
-                    $html .= "     <div class=\"collapse ".($exists_extra_info ? 'in':'')."\" style=\"margin-top: 10px\" id=\"expandable" . $student_in_meeting["student_id"] . "\">";
+                    $html .= "     <div class=\"collapse ".($exists_extra_info ? 'in':'')."\" style=\"margin-top: 10px\" id=\"".$meeting["reunion_id"]."expandable" . $student_in_meeting["student_id"] . "\">";
                     $html .= "      <div class=\"row\" style='margin-top: 10px'>";
                     $html .= "        <div class='col-xs-3' style='margin-left: 10px'></div>";
                     $html .= "        <div class='col-xs-8'>";
