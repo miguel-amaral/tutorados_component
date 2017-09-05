@@ -47,7 +47,7 @@ class TutoradosModelCreateOutputFile extends AppModel {
 //            dispatch(array("tutor_id" => $istId));
 
 
-        $this->data["titles"] = array("tutor nrº","Nome do Tutor","Data da Reunião","Comentário Geral da Reunião","Data Criação da Reunião");
+        $this->data["titles"] = array("Data da Inserção", "Hora da Inserção", "Data da Reunião", "Hora da Reunião", "Nome do aluno", "Nº de aluno", "Nome do Tutor", "Nº Mec. Tutor", "Resumo da Reunião", "Resumo individual da reunião", "Presente");
         $this->data["meetings"] = App::instance()->db->
             select(array("responsible_tutor","tutor_name","date","extra_info","time_created","reunion_id"))->
 //            select(array("responsible_tutor","tutor_name","date","extra_info"))->

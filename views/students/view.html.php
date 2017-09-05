@@ -57,7 +57,7 @@ class TutoradosViewStudents extends AppView {
             $html .= "		<div class=\"text-center col-xs-1 panel-title\" style='margin-left: 10px'>Número IST</div>";
             $html .= "		<div class=\"text-center col-xs-7 panel-title\">Nome do Aluno</div>";
             $html .= "		<div class=\"text-center col-xs-1 \">Histórico de Reuniões</div>";
-            $html .= "		<div class=\"text-center col-xs-1 \">Ano de Entrada</div>";
+            $html .= "		<div class=\"text-center col-xs-1 \">Ano Tutoria</div>";
             $html .= "		<div class='col-xs-1 panel-title'></div>";
             $html .= "    </div>";
 

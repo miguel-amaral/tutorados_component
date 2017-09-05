@@ -65,21 +65,27 @@ class TutoradosModelDetailedStudent extends AppModel {
                 $this->data["number_present"]++;
             }
             $meeting_id = $meeting["reunion_id"];
-            $this->data["meetings"][$index]["per_cent"] = App::instance()->db->
-            execute("SELECT 100*count(*) / total.total as per_cent
-		     FROM tuturado_reunion_atendence JOIN (SELECT count(*) as total FROM tuturado_reunion_atendence WHERE reunion_id = :reunion_id) total
-		     WHERE reunion_id = :reunion_id AND present = 1
-		     GROUP BY present
-		    ",array("reunion_id"=>$meeting_id));
+            $this->data["meetings"][$index]["number_students_meeting"] = App::instance()->db->execute("SELECT count(*) as total FROM tuturado_reunion_atendence WHERE reunion_id = :reunion_id",array("reunion_id"=>$meeting_id))[0]["total"];
+            $this->data["meetings"][$index]["number_students_present"] = App::instance()->db->execute("SELECT count(*) as total_attended
+		                FROM tuturado_reunion_atendence   
+		                WHERE tuturado_reunion_atendence.reunion_id = :reunion_id AND present = 1",array("reunion_id"=>$meeting_id))[0]["total_attended"];
 
+//            var_dump($this->data["meetings"][$index]["number_students_meeting"]);
+//            echo("<br>");
+//            var_dump($this->data["meetings"][$index]["number_students_present"]);
+//            echo("<br>");
+            $this->data["meetings"][$index]["per_cent"] = $this->data["meetings"][$index]["number_students_present"] * 100/$this->data["meetings"][$index]["number_students_meeting"];
 //            var_dump($this->data["meetings"][$index]["per_cent"]);
-
-            $this->data["meetings"][$index]["per_cent"] = $this->data["meetings"][$index]["per_cent"][0]["per_cent"];
-//            var_dump(explode( '.',$this->data["meetings"][$index]["per_cent"]));
-            $this->data["meetings"][$index]["per_cent"] = explode( '.',$this->data["meetings"][$index]["per_cent"])[0];
+//            echo("$meeting_id<br><br>");
+//            $this->data["meetings"][$index]["per_cent"] = explode( '.',$this->data["meetings"][$index]["per_cent"])[0];
             $index++;
         }
-        $this->data["total_reunions"] = sizeof($this->getData()["meetings"]);
+
+        if(sizeof($this->data["meetings"]) == 0){
+		    App::instance()->messages->addInfo("Relembre e incentive os seus Tutorandos a atualizar a fotografia de perfil no fénix.");
+        }
+
+//        $this->data["total_reunions"] = sizeof($this->getData()["meetings"]);
         $this->data["percentage_attended"] = (string)((100*$this->data["number_present"])/ $this->data["total_reunions"]);
     }
 

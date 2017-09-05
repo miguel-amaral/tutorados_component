@@ -58,7 +58,7 @@ class TutoradosViewListAllStudents extends AppView {
             $html .= "		<div class=\"text-center col-xs-4 panel-title\">Nome do Aluno</div>";
             $html .= "		<div class=\"text-center col-xs-4 panel-title\">Nome do Tutor</div>";
             $html .= "		<div class=\"text-center col-xs-1 \">Histórico de Reuniões</div>";
-            $html .= "		<div class=\"text-center col-xs-1 \">Ano de Entrada</div>";
+            $html .= "		<div class=\"text-center col-xs-1 \">Ano Tutoria</div>";
             $html .= "		<div class='col-xs-1 panel-title'></div>";
             $html .= "    </div>";
 

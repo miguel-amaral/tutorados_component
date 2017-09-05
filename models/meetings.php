@@ -90,6 +90,10 @@ class TutoradosModelMeetings extends AppModel {
             $counter  = $counter +1;
         }
 
+        if(sizeof($this->data["meetings"]) == 0){
+            App::instance()->messages->addInfo("Relembre e incentive os seus Tutorandos a atualizar a fotografia de perfil no fénix.");
+        }
+
 
 //            execute("SELECT date, local, meio FROM tuturado_reunion WHERE responsible_tutor=:tutor_id",array("tutor_id" => $istId));
     }

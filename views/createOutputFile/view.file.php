@@ -23,34 +23,36 @@ class tutoradosViewCreateOutputFile extends AppView {
 
 	public function render(){
         $filename = "export.csv";
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
         header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="'.$filename.'";');
+        header('Content-Disposition: filename="'.$filename.'"');
 
         $file = "";
         $file .= $this->array_to_csv_download(array($this->getData()["titles"]));
 
         foreach($this->data["meetings"] as $meeting){
-            $file .= $this->array_to_csv_download(array(array(
-
-            $meeting["responsible_tutor"]
-            ,$meeting["tutor_name"]
-            ,$meeting["date"]
-            ,$meeting["extra_info"]
-            ,$meeting["time_created"]
-
-
-            )));
+//            $file .= $this->array_to_csv_download(array(array(
+//            )));
             $meeting_id = $meeting["reunion_id"];
             foreach ($this->data[$meeting_id] as $student_in_meeting){
                 $file .= $this->array_to_csv_download(array(array(
-                    ""
-                    ,$student_in_meeting["student_id"]
+                    $meeting["time_created"]
+                    ,$meeting["time_created"]
+                    ,$meeting["date"]
+                    ,$meeting["date"]
                     ,$student_in_meeting["name"]
+                    ,$student_in_meeting["student_id"]
+                    ,$meeting["tutor_name"]
+                    ,$meeting["responsible_tutor"]
+                    ,$meeting["extra_info"]
+
+
                     ,$student_in_meeting["extra_info"]
                     ,(($student_in_meeting["present"] == "1" ) ? "Presente" : "Faltou" )
                 )));
             }
-            $file .= $this->array_to_csv_download(array(array("")));
         }
 
 

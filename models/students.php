@@ -58,6 +58,16 @@ class TutoradosModelStudents extends AppModel {
 
         $this->fetchTutorStudents($istId);
 
+        $meetings = App::instance()->db->
+            select(array("responsible_tutor","date","reunion_id","local","meio","extra_info","tutor_name"))->
+            from("tuturado_reunion JOIN tuturado_tutor ON tuturado_tutor.istid=tuturado_reunion.responsible_tutor")->
+            where("responsible_tutor=:tutor_id")->
+            dispatch(array("tutor_id" => $istId));
+
+        if(sizeof($meetings) == 0){
+            App::instance()->messages->addInfo("Relembre e incentive os seus Tutorandos a atualizar a fotografia de perfil no fénix.");
+        }
+
 
     }
 
