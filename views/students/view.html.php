@@ -55,7 +55,8 @@ class TutoradosViewStudents extends AppView {
             $html .= "    <div class=\"row\" style='margin-top: 10px'>";
 
             $html .= "		<div class=\"text-center col-xs-1 panel-title\" style='margin-left: 10px'>Número IST</div>";
-            $html .= "		<div class=\"text-center col-xs-7 panel-title\">Nome do Aluno</div>";
+            $html .= "		<div class=\"text-center col-xs-1 panel-title\">Foto</div>";
+            $html .= "		<div class=\"text-center col-xs-6 panel-title\">Nome do Aluno</div>";
             $html .= "		<div class=\"text-center col-xs-1 \">Histórico de Reuniões</div>";
             $html .= "		<div class=\"text-center col-xs-1 \">Ano Tutoria</div>";
             $html .= "		<div class='col-xs-1 panel-title'></div>";
@@ -78,11 +79,19 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "                <input id=\"istid". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"IST ID\" placeholder=\"IST ID\" value=\"" . $student["istid"] . "\">";
 //                $html .= "          </div>";
 //                $html .= "      </div>";
+                $id_for_pic = $student['istid'];
+                if (strpos($id_for_pic, 'ist1') === false) {
+                    $id_for_pic = "ist1" . $id_for_pic;
+                }
+                $html .= '  <div class="col-xs-1 ">';
+                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'">';
+                $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
+                $html .= '      </a>';
+                $html .= '  </div>';
 
-                $html .= "		<div class=\"col-xs-7\">";
+                $html .= "		<div class=\"col-xs-6\">";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Nome</span>";
-                "";
                 $html .= "                <input readonly='readonly' id=\"name". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"IST ID\" placeholder=\"Nome Do Aluno\" value=\"".$student["name"]."\">";
                 $html .= "          </div>";
                 $html .= "      </div>";

@@ -126,6 +126,7 @@ class TutoradosViewAddMeeting extends AppView {
             foreach ($this->getData()["students"] as $student) {
                 $html .= "		<input type='hidden' name='new_meeting_students[]' value='".$student["istid"]."'>";
 
+                $html .= "<div style='margin-bottom: 50px'>";
                 $html .= "         <div class=\"row\">";
                 $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student["istid"]));
 
@@ -138,16 +139,29 @@ class TutoradosViewAddMeeting extends AppView {
                 $html .= '            </div>';
                 $html .= "	    	  <div class=\"col-xs-2\"><a data-toggle=\"collapse\" href=\"#expandable" . $student["istid"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student["istid"] . "\">Adicionar Comentário</a></div>";
                 $html .= "         </div>";
-                $html .= "         <div class=\"collapse\" style=\"margin-top: 10px\" id=\"expandable" . $student["istid"] . "\">";
+                $html .= "         <div class=\"collapse in\" style=\"margin-top: 10px\" id=\"expandable" . $student["istid"] . "\">";
                 $html .= "             <div class=\"row\">";
 
-                $html .= '                <div class="col-xs-1"></div>';
-                $html .= '                <div class="col-xs-10 form-group">';
+//                $html .= '                <div class="col-xs-1"></div>';
+                $id_for_pic = $student['istid'];
+                if (strpos($id_for_pic, 'ist1') === false) {
+                    $id_for_pic = "ist1" . $id_for_pic;
+                }
+                $html .= '  <div class="col-xs-2 ">';
+//                $html .= '    <div class="thumbnail" style="margin-left:10px;margin-top: 30px">';
+                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'">';
+                $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
+                $html .= '      </a>';
+//                $html .= '    </div>';
+                $html .= '  </div>';
+
+                $html .= '                <div class="col-xs-9 form-group">';
                 $html .= '                    <label for="comment">Informações Individuais:</label>';
                 $html .= '                    <textarea name="new_meeting_comment'.$student["istid"].'" class="form-control" rows="4" id="comment"></textarea>';
                 $html .= '                </div>';
                 $html .= "             </div>";
                 $html .= "         </div>";
+                $html .= "</div>";
             }
 
 
