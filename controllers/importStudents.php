@@ -30,6 +30,8 @@ class TutoradosControllerImportStudents extends AppController {
 	 */
 	public function execute(){
         if(isset($_POST["update_tutorado"])){
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
             $this->parseFile();
         }
 	}
@@ -61,6 +63,9 @@ class TutoradosControllerImportStudents extends AppController {
 
         $lineNR = 0;
 
+        $previous_tutor_id = "";
+        $previous_tutor_name = "";
+
         foreach ($Sheets as $Index => $Name) {
 
             $Reader->ChangeSheet($Index);
@@ -71,40 +76,55 @@ class TutoradosControllerImportStudents extends AppController {
                 if(sizeof($Row) < 6) {
                     $this->badLine($lineNR,$Row);
                 }
-                App::instance()->db->insert("tuturado_tutor")->
-                    fields(array("istid", "tutor_name",))->
-                    values(array(":istid", ":tutor_name",))->
-                    dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
 
-//                if($lineNR % 5 == 0){
-//
-//                    $confirmation_tutor = App::instance()->db->select(array("istid","tutor_name"))->
-//                        from("tuturado_tutor")->
-//                        where("istid=:istid AND tutor_name=:tutor_name")->
-//                        dispatch(array("istid" => $Row[0], "tutor_name" => "empty"));
-//                } else {
-                $confirmation_tutor = App::instance()->db->select(array("istid", "tutor_name"))->
-                    from("tuturado_tutor")->
-                    where("istid=:istid AND tutor_name=:tutor_name")->
-                    dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
-//                }
+                if(                $previous_tutor_id === $Row[0] and $previous_tutor_name === $Row[1]){
+                } else {
+                    App::instance()->db->insert("tuturado_tutor")->
+                        fields(array("istid", "tutor_name",))->
+                        values(array(":istid", ":tutor_name",))->
+                        dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
+                    $confirmation_tutor = App::instance()->db->select(array("istid", "tutor_name"))->
+                        from("tuturado_tutor")->
+                        where("istid=:istid AND tutor_name=:tutor_name")->
+                        dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1]));
 
-                
+                    // ----------------------------------------------------------------------------------------------------
+                    // Add tutor to authorized users of DMS
+                    App::instance()->db->insert("users")->
+                        fields(array("username", "name","email",'password'))->
+                        values(array(":istid", ":tutor_name",":email","''"))->
+                        dispatch(array("istid" => $Row[0], "tutor_name" => $Row[1],"email" => 'unknown'.$Row[0]));
+                    $confirmation_user_tutor = App::instance()->db->select(array("id", "username"))->
+                        from("users")->
+                        where("username=:istid")->
+                        dispatch(array("istid" => $Row[0]));
+
+                    if(sizeof($confirmation_user_tutor) > 0) {
+                        $user_id_for_permission = $confirmation_user_tutor[0]["id"];
+                        App::instance()->db->insert("users_groups")->
+                            fields(array("user_id", "group_id"))->
+                            values(array(":user_id_for_permission", "16"))->
+                            dispatch(array("user_id_for_permission" => $user_id_for_permission));
+                    }
+                }
+                // ----------------------------------------------------------------------------------------------------
+                $previous_tutor_id = $Row[0];
+                $previous_tutor_name = $Row[1];
+
+
+
+
                 App::instance()->db->insert("tuturado_student")->
                     fields(array("istid", "name", "email", "tutor_id","entry_year"))->
                     values(array(":istid", ":name" ,":email",":tutor_id",":entry_year"))->
-                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5],"entry_year" => $Row[6]));
-//                    fields(array("istid", "name","email","tutor_id","telefone"))->
-//                    values(array(":istid", ":name" ,":email",":tutor_id",":telefone"))->
-//                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5],"telefone" => $Row[4]));
-
+                    dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5], "entry_year" => $Row[6]));
                 $confirmation_aluno = App::instance()->db->select(array("istid","name","email","tutor_id","entry_year"))->
                     from("tuturado_student")->
                     where("istid=:istid AND name=:name AND email=:email AND tutor_id=:tutor_id AND entry_year=:entry_year")->
                     dispatch(array("istid" => $Row[2], "name" => $Row[3],"tutor_id" => $Row[0], "email" => $Row[5], "entry_year" => $Row[6]));
 
 
-                if(sizeof($confirmation_tutor) > 0 AND sizeof($confirmation_aluno) > 0) {
+                if(sizeof($confirmation_tutor) > 0 AND sizeof($confirmation_aluno) > 0 AND sizeof($confirmation_user_tutor) > 0) {
                     $this->goodLine($lineNR);
                 } else {
                     $this->badLine($lineNR,$Row);

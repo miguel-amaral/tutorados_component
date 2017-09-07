@@ -37,6 +37,9 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .="            <li ><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
             $html .="            <li ><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
         }
+        $html .="    <style>";
+//        $html .="    div {border:1px solid black;}";
+        $html .="    </style>";
 
         $html .="    </ul>";
         $html .= "</div>";
@@ -96,10 +99,7 @@ class TutoradosViewDetailedStudent extends AppView {
                 if (strpos($id_for_pic, 'ist1') === false) {
                     $id_for_pic = "ist1" . $id_for_pic;
                 }
-
-                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'">';
                 $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
-                $html .= '      </a>';
                 $html .= '    </div>';
                 $html .= '  </div>';
 
@@ -163,11 +163,11 @@ class TutoradosViewDetailedStudent extends AppView {
                 $html .= "        <div class='col-xs-4' style='margin-left: 10px'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Nota Entrada</span>";
-                $html .= "                <input id=\"entry_grade". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_grade\" placeholder=\"Nota de Entrada\" value=\"" . $student["entry_grade"] . "\">";
+                $html .= "                <input id=\"entry_grade". $student['istid'] ."\" step=\"any\" type=\"number\" max='20' min='0' class=\"form-control\" name=\"entry_grade\" placeholder=\"Nota de Entrada\" value=\"" . $student["entry_grade"] . "\">";
                 $html .= "          </div>";
                 $html .= "        </div>";
 //                $html .= "        <div class='col-xs-3'></div>";
-                $html .= "        <div class='col-xs-3'>";
+                $html .= "        <div class='col-xs-4'>";
 
                 $html .= '            <div class="input-group">';
                 $html .= "               <span class=\"input-group-addon\">Fase de Entrada</span>";
@@ -221,7 +221,7 @@ class TutoradosViewDetailedStudent extends AppView {
                 $html .= '            </div>';
                 $html .= "        </div>";
 //                $html .= "        <div class='col-xs-3'></div>";
-                $html .= "        <div class='col-xs-3'>";
+                $html .= "        <div class='col-xs-4'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "              <span class=\"input-group-addon\">Ano de Entrada</span>";
                 $html .= "              <input readonly='readonly' id=\"entry_year". $student['istid'] ."\" type=\"text\" class=\"form-control\" name=\"entry_year\" placeholder=\"Telefone do Aluno\" value=\"" . $student["entry_year"] . "\">";
@@ -230,10 +230,10 @@ class TutoradosViewDetailedStudent extends AppView {
                 $html .= "      </div>";
 
 
-                $html .= '      <div class="checkbox col-xs-5">';
-                $html .= "              <div class=\"input-group\">";
-                $html .= '          <label><input name="deslocated" type="checkbox" ' . (($student["deslocated"] == "1" ) ? "checked" : " " ). '>Aluno Deslocado</label>';
-                $html .= '      </div>';
+                $html .= '      <div class="col-xs-5" style="padding: 10px">';
+                $html .= "          <div class=\"input-group\">";
+                $html .= '            <label class="checkbox-inline"><input name="deslocated" type="checkbox" ' . (($student["deslocated"] == "1" ) ? "checked" : " " ). '>Aluno Deslocado</label>';
+                $html .= '          </div>';
                 $html .= '      </div>';
 
 //                $html .= "        <div class='col-xs-5' style='margin-left: 10px'>";
@@ -335,17 +335,17 @@ class TutoradosViewDetailedStudent extends AppView {
                 $html .= "		<input type='hidden' name='meetings[]' value='".$meeting["reunion_id"]."'>";
                 $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'></div>";
                 $html .= "		<div class=\"col-xs-2\" > " . $meeting["date"] . " </div>";
-                $html .= "		<div class=\"col-xs-2\">@ " . $meeting["local"] . " </div>";
+                $html .= "		<div class=\"text-center col-xs-2\">@ " . $meeting["local"] . " </div>";
 //                $html .= "		<div class=\"col-xs-1\">" . $student["attendence"] . " </div>";
-                $html .= "		<div class=\"col-xs-2\" >via " . $meeting["meio"] . "</div>";
-                $html .= '      <div class="checkbox col-xs-2">';
-                $html .= '          <label><input name="present'.$meeting["reunion_id"].'" type="checkbox" ' . (($meeting["present"] == "1" ) ? "checked" : " " ). '>Present</label>';
+                $html .= "		<div class=\"text-center col-xs-2\" >via " . $meeting["meio"] . "</div>";
+                $html .= '      <div class="text-center col-xs-2">';
+                $html .= '          <label class="checkbox-inline"><input name="present'.$meeting["reunion_id"].'" type="checkbox" ' . (($meeting["present"] == "1" ) ? "checked" : " " ). '>Present</label>';
                 $html .= '      </div>';
-                $html .= "		<div class=\"col-xs-2\" >" . $meeting["per_cent"] . "%</div>";
+                $html .= "		<div class=\"text-center col-xs-2\" >" . $meeting["per_cent"] . "% Alunos Presentes</div>";
                 $html .= "</div>";
                 $html .= "<div class=\"row\" style='margin-top: 10px'>";
                 $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'></div>";
-                $html .= "      <div class='col-xs-9'>";
+                $html .= "      <div class='col-xs-10'>";
                 $html .= '            <div class="form-group">';
                 $html .= '                <label for="comment">Comentários da Reunião Específicos ao Aluno:</label>';
                 $html .= '                <textarea name="extra_reunion_info'.$meeting["reunion_id"].'" class="form-control" rows="5" id="comment"> '.$meeting["extra_info"].' </textarea>';

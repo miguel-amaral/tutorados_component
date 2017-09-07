@@ -38,10 +38,10 @@ class tutoradosViewCreateOutputFile extends AppView {
             $meeting_id = $meeting["reunion_id"];
             foreach ($this->data[$meeting_id] as $student_in_meeting){
                 $file .= $this->array_to_csv_download(array(array(
-                    $meeting["time_created"]
-                    ,$meeting["time_created"]
-                    ,$meeting["date"]
-                    ,$meeting["date"]
+                    DateTime::createFromFormat("Y-m-d H:i:s", $meeting["time_created"])->format('d/m/Y')
+                    ,DateTime::createFromFormat("Y-m-d H:i:s", $meeting["time_created"])->format('H:i')
+                    ,DateTime::createFromFormat("Y-m-d H:i:s", $meeting["date"])->format('d/m/Y')
+                    ,DateTime::createFromFormat("Y-m-d H:i:s", $meeting["date"])->format('H:i')
                     ,$student_in_meeting["name"]
                     ,$student_in_meeting["student_id"]
                     ,$meeting["tutor_name"]

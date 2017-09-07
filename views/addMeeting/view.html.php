@@ -18,6 +18,7 @@ class TutoradosViewAddMeeting extends AppView {
 	public function __construct($model){ parent::__construct($model); }
 
 	public function render(){
+
         $students_link = App::instance()->buildURL("com_tutorados", "students");
         $meetings_link = App::instance()->buildURL("com_tutorados", "meetings");
         $add_meetings_link = App::instance()->buildURL("com_tutorados", "addMeeting");
@@ -39,7 +40,9 @@ class TutoradosViewAddMeeting extends AppView {
             $html .="            <li ><a href=$list_all_students_link>Listar Todos Alunos</a></li>";
             $html .="            <li ><a href=$list_all_meetings_link>Listar Todas Reuniões</a></li>";
         }
-
+        $html .="    <style>";
+//        $html .="    div {border:1px solid black;}";
+        $html .="    </style>";
         $html .="    </ul>";
 
 
@@ -130,14 +133,14 @@ class TutoradosViewAddMeeting extends AppView {
                 $html .= "         <div class=\"row\">";
                 $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student["istid"]));
 
-                $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'> <a href='$url'>" . $student["istid"] . " </a></div>";
+                $html .= "		<div class=\"text-center col-xs-2\" style='margin-left: 0px'> <a href='$url'>" . $student["istid"] . " </a></div>";
 
 //                $html .= "            <div class='col-xs-1'>".$student["istid"]."</div>";
-                $html .= "            <div class='col-xs-6'>".$student["name"]."</div>";
-                $html .= '            <div class="checkbox col-xs-2">';
-                $html .= '                <label><input name="new_meeting_present'.$student["istid"].'" type="checkbox" >Presente</label>';
+                $html .= "            <div class='col-xs-7'>".$student["name"]."</div>";
+                $html .= '            <div class="col-xs-2">';
+                $html .= '                <label class="checkbox-inline"><input name="new_meeting_present'.$student["istid"].'" type="checkbox" >Presente</label>';
                 $html .= '            </div>';
-                $html .= "	    	  <div class=\"col-xs-2\"><a data-toggle=\"collapse\" href=\"#expandable" . $student["istid"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student["istid"] . "\">Adicionar Comentário</a></div>";
+//                $html .= "	    	  <div class=\"col-xs-2\"><a data-toggle=\"collapse\" href=\"#expandable" . $student["istid"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student["istid"] . "\">Adicionar Comentário</a></div>";
                 $html .= "         </div>";
                 $html .= "         <div class=\"collapse in\" style=\"margin-top: 10px\" id=\"expandable" . $student["istid"] . "\">";
                 $html .= "             <div class=\"row\">";
@@ -148,11 +151,9 @@ class TutoradosViewAddMeeting extends AppView {
                     $id_for_pic = "ist1" . $id_for_pic;
                 }
                 $html .= '  <div class="col-xs-2 ">';
-//                $html .= '    <div class="thumbnail" style="margin-left:10px;margin-top: 30px">';
-                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'">';
-                $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
-                $html .= '      </a>';
-//                $html .= '    </div>';
+                $html .= "    <a href='$url'>";
+                $html .= '        <img class="center-block img-thumbnail img-responsive" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
+                $html .= "    </a>";
                 $html .= '  </div>';
 
                 $html .= '                <div class="col-xs-9 form-group">';

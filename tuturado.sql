@@ -33,11 +33,11 @@ CREATE TABLE IF NOT EXISTS tuturado_student(
     other VARCHAR(255),
 
     preferencial_contact VARCHAR(255),
-    entry_grade float,
+    entry_grade VARCHAR(255),
     deslocated BOOLEAN,
-    entry_phase int,
-    option_number int,
-    entry_year VARCHAR(20),
+    entry_phase VARCHAR(255),
+    option_number VARCHAR(255),
+    entry_year VARCHAR(50),
 
     tutor_id VARCHAR(255),
     FOREIGN KEY (tutor_id) REFERENCES tuturado_tutor (istid) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -57,6 +57,8 @@ CREATE TABLE tuturado_reunion_atendence(
 
     present BOOLEAN DEFAULT 0,
 
-    extra_info TEXT
+    extra_info TEXT,
+
+    UNIQUE KEY (reunion_id,student_id)
 );
-source inserts_ist178865.sql;
+-- source inserts_ist178865.sql;

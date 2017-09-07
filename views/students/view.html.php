@@ -72,7 +72,19 @@ class TutoradosViewStudents extends AppView {
 //                $html .= "		<div class=\"col-xs-1\" >";
                 $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student["istid"]));
 
-                $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'> <a href='$url'>" . $student["istid"] . " </a></div>";
+                $html .= "	  <div class=\"text-center  col-xs-1\" style='margin-left: 10px'>";
+                $html .= '        <div class="row">';
+                $html .= '            <div class="col-xs-12">';
+                $html .= "	                <a href='$url'>" . $student["istid"] . " </a>";
+                $html .= '            </div>';
+                $html .= '        </div>';
+                $html .= '        <div class="row">';
+                $html .= '            <div class="col-xs-12" STYLE="margin-top: 10px">';
+                $html .= "	                <a class=\"btn btn-primary\" href='$url'>Editar </a>";
+//                $html .= '                    <button type="submit" name="submit" >Editar</button>';
+                $html .= '            </div>';
+                $html .= '        </div>';
+                $html .= '    </div>';
 
 //                $html .= "          <div class=\"input-group\">";
 //                $html .= "                <span class=\"input-group-addon\">IST ID</span>";
@@ -84,9 +96,9 @@ class TutoradosViewStudents extends AppView {
                     $id_for_pic = "ist1" . $id_for_pic;
                 }
                 $html .= '  <div class="col-xs-1 ">';
-                $html .= '      <a href="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'">';
-                $html .= '        <img class="img" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
-                $html .= '      </a>';
+                $html .= "          <a href='$url'>";
+                $html .= '              <img class="img-responsive " src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
+                $html .= "          </a>";
                 $html .= '  </div>';
 
                 $html .= "		<div class=\"col-xs-6\">";
@@ -107,13 +119,13 @@ class TutoradosViewStudents extends AppView {
                 $html .= "		<div class=\"col-xs-1\" >";
                 $html .= "          <div class=\"input-group\">";
 //                $html .= "                <span class=\"input-group-addon\"></span>";
-                $html .= "                <input readonly='readonly' id=\"historic". $student["istid"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $student['attendance'] . "\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"historic". $student["istid"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $student['attendance'] . "\">";
                 $html .= "          </div>";
                 $html .= "      </div>";
                 $html .= "		<div class=\"col-xs-1\" >";
                 $html .= "          <div class=\"input-group\">";
 //                $html .= "                <span class=\"input-group-addon\"></span>";
-                $html .= "                <input readonly='readonly' id=\"entry_year". $student["istid"] ."\" type=\"text\" class=\"form-control\" name=\"entry_year\" placeholder=\"\" value=\"" . $student['entry_year'] . "\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"entry_year". $student["istid"] ."\" type=\"text\" class=\"form-control\" name=\"entry_year\" placeholder=\"\" value=\"" . $student['entry_year'] . "\">";
                 $html .= "          </div>";
                 $html .= "      </div>";
 
@@ -126,7 +138,9 @@ class TutoradosViewStudents extends AppView {
 //              more details of the student (hidden)
                 $html .= "    <div class=\"collapse\" style=\"margin-top: 10px\" id=\"expandable" . $student['istid'] . "\">";
                 $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                $html .= "        <div class='col-xs-1' style='margin-left: 10px'></div>";
+                $html .= "        <div class='col-xs-1 center-block text-center' style='margin-left: 10px'>";
+//                    $html .= '        <button type="submit" name="submit" class="btn btn-primary">Editar</button>';
+                $html .= "        </div>";
                 $html .= "        <div class='col-xs-5'>";
                 $html .= "          <div class=\"input-group\">";
                 $html .= "                <span class=\"input-group-addon\">Email</span>";

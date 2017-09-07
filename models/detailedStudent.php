@@ -85,8 +85,8 @@ class TutoradosModelDetailedStudent extends AppModel {
 		    App::instance()->messages->addInfo("Relembre e incentive os seus Tutorandos a atualizar a fotografia de perfil no fénix.");
         }
 
-//        $this->data["total_reunions"] = sizeof($this->getData()["meetings"]);
-        $this->data["percentage_attended"] = (string)((100*$this->data["number_present"])/ $this->data["total_reunions"]);
+        $this->data["total_reunions"] = sizeof($this->getData()["meetings"]);
+        $this->data["percentage_attended"] = (int)((100*$this->data["number_present"])/ $this->data["total_reunions"]);
     }
 
     public function getNumberMeetingsPresent($meetings,$studentID) {
@@ -115,7 +115,7 @@ class TutoradosModelDetailedStudent extends AppModel {
         if(sizeof($meetings) == 0){
             return "NA" . "%";
         }
-        return (string)((100*$number_present)/ sizeof($meetings)) . "%";
+        return (int)((100*$number_present)/ sizeof($meetings)) . "%";
     }
 
 	public function getData(){

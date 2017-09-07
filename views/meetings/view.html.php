@@ -39,6 +39,9 @@ class TutoradosViewMeetings extends AppView {
         }
 
         $html .="    </ul>";
+        $html .="    <style>";
+//        $html .="    div {border:1px solid black;}";
+        $html .="    </style>";
 
         $html .= "<div class=\"tab-content\" style=\"margin-top:10px\">";
     	$html .= "	<div class=\"tab-pane active\" id=\"temp\">";
@@ -66,36 +69,36 @@ class TutoradosViewMeetings extends AppView {
             $html .= "    <form>";
 
 			foreach($this->getData()["meetings"] as $meeting){
-                $html .= "    <div class=\"row\" style='margin-top: 10px'>";
+                $html .= "    <div class=\"row\" style='margin-top: 30px'>";
 
 
                 $html .= "		<div class=\"col-xs-2\" style='margin-left: 10px'>";# " . $meeting["date"] . " </div>";
 
-                $html .= "          <div class=\"input-group\">";
-                $html .= "                <input readonly='readonly' id=\"date". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["date"] . "\">";
-                $html .= "          </div>";
+//                $html .= "          <div class=\"input-group\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"date". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["date"] . "\">";
+//                $html .= "          </div>";
                 $html .= "      </div>";
 
                 $html .= "		<div class=\"col-xs-2\">";
-                $html .= "          <div class=\"input-group text-center\">";
-                $html .= "                <input  readonly='readonly' id=\"local". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["local"] . "\">";
-                $html .= "          </div>";
+//                $html .= "          <div class=\"input-group text-center\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"local". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["local"] . "\">";
+//                $html .= "          </div>";
                 $html .= "      </div>";
 
                 $html .= "		<div class=\"col-xs-2\" >";
-                $html .= "          <div class=\"input-group\">";
-                $html .= "                <input readonly='readonly' id=\"meio". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["meio"] . "\">";
-                $html .= "          </div>";
+//                $html .= "          <div class=\"input-group\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"meio". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["meio"] . "\">";
+//                $html .= "          </div>";
                 $html .= "      </div>";
                 $html .= "		<div class=\"col-xs-2\" >";
-                $html .= "          <div class=\"input-group\">";
-                $html .= "                <input readonly='readonly' id=\"responsible". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["responsible_tutor"] . "\">";
-                $html .= "          </div>";
+//                $html .= "          <div class=\"input-group\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"responsible". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["responsible_tutor"] . "\">";
+//                $html .= "          </div>";
                 $html .= "      </div>";
                 $html .= "		<div class=\"col-xs-2\" >";
-                $html .= "          <div class=\"input-group\">";
-                $html .= "                <input readonly='readonly' id=\"attendence". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["attendance"] . "%\">";
-                $html .= "          </div>";
+//                $html .= "          <div class=\"input-group\">";
+                $html .= "                <input style=\"text-align:center;\" readonly='readonly' id=\"attendence". $meeting["reunion_id"] ."\" type=\"text\" class=\"form-control\" name=\"historic\" placeholder=\"\" value=\"" . $meeting["attendance"] . "%\">";
+//                $html .= "          </div>";
                 $html .= "      </div>";
                 $html .= "		<div class=\"col-xs-1\"><a data-toggle=\"collapse\" href=\"#expandable_geral" . $meeting["reunion_id"] . "\" aria-expanded='true' aria-controls=\"expandable" . $meeting["reunion_id"] . "\">Detalhes</a></div>";
                 $html .= "    </div >";
@@ -103,7 +106,7 @@ class TutoradosViewMeetings extends AppView {
                 //more details
                 $html .= "    <div class=\"collapse\" style=\"margin-top: 10px\" id=\"expandable_geral" . $meeting["reunion_id"] . "\">";
                 $html .= "		<input type='hidden' name='meetings[]' value='".$meeting["reunion_id"]."'>";
-                $html .= "      <div class=\"row\" style='margin-top: 30px'>";
+                $html .= "      <div class=\"row\" style='margin-top: 00px'>";
                 $html .= "        <div class='col-xs-2' style='margin-left: 10px'></div>";
                 $html .= "        <div class='col-xs-8'>";
 
@@ -151,22 +154,34 @@ class TutoradosViewMeetings extends AppView {
                     $html .= "        <div class='col-xs-2 'style='margin-left: 10px'></div>";
 
                     $url = App::instance()->buildURL("com_tutorados", "detailedStudent", array("detailedStudent" => $student_in_meeting["student_id"]));
-                    $html .= "		<div class=\"col-xs-1\" style='margin-left: 10px'> <a href='$url'>" . $student_in_meeting["student_id"] . " </a></div>";
+                    $html .= "		<div class=\"col-xs-1 text-center \" style='margin-left: 0px'> <a href='$url'>" . $student_in_meeting["student_id"] . " </a></div>";
 
                     $html .= "        <div class='col-xs-4'>".$student_in_meeting["name"]."</div>";
-                    $html .= '        <div class="checkbox col-xs-2">';
-                    $html .= '            <label><input name="'.$student_in_meeting["student_id"].'_present_in_meeting_'.$meeting["reunion_id"].'" type="checkbox" ' . (($student_in_meeting["present"] == "1" ) ? "checked" : " " ). '>Present</label>';
+
+                    $html .= '        <div class="col-xs-1">';
+                    $html .= '            <label class="checkbox-inline"><input name="'.$student_in_meeting["student_id"].'_present_in_meeting_'.$meeting["reunion_id"].'" type="checkbox" ' . (($student_in_meeting["present"] == "1" ) ? "checked" : " " ). '>Present</label>';
                     $html .= '        </div>';
                     $html .= "        <div class='col-xs-2'><a  data-toggle=\"collapse\" href=\"#".$meeting["reunion_id"]."expandable" . $student_in_meeting["student_id"] . "\" aria-expanded='true' aria-controls=\"expandable" . $student_in_meeting["student_id"] . "\">Comentário Individual</a></div>";
 
                     $html .= "      </div >";
 
 
-                    $html .= "     <div class=\"collapse ".($exists_extra_info ? 'in':'')."\" style=\"margin-top: 10px\" id=\"".$meeting["reunion_id"]."expandable" . $student_in_meeting["student_id"] . "\">";
-                    $html .= "      <div class=\"row\" style='margin-top: 10px'>";
-                    $html .= "        <div class='col-xs-3' style='margin-left: 10px'></div>";
-                    $html .= "        <div class='col-xs-8'>";
+                    $html .= "     <div class=\"collapse ".($exists_extra_info ? 'in':'in')."\" style=\"margin-top: 10px\" id=\"".$meeting["reunion_id"]."expandable" . $student_in_meeting["student_id"] . "\">";
+                    $html .= "      <div class=\"row\" style='margin-top: 0px'>";
+                    $html .= "        <div class='col-xs-2' style='margin-left: 10px'></div>";
+                    $id_for_pic = $student_in_meeting['student_id'];
+                    if (strpos($id_for_pic, 'ist1') === false) {
+                        $id_for_pic = "ist1" . $id_for_pic;
+                    }
+                    $html .= '  <div class="col-xs-1 ">';
+//                $html .= '    <div class="thumbnail" style="margin-left:10px;margin-top: 30px">';
+                    $html .= "          <a href='$url'>";
 
+                    $html .= '              <img class="center-block img-responsive img-thumbnail" src="https://fenix.tecnico.ulisboa.pt/user/photo/'.$id_for_pic.'" alt="Nature" style="">';
+                    $html .= "          </a>";
+//                $html .= '    </div>';
+                    $html .= '  </div>';
+                    $html .= "        <div class='col-xs-7'>";
                     $html .= '        <div class="form-group">';
                     $html .= '            <label for="comment">Comentário Individual:</label>';
                     $html .= '            <textarea name="'.$student_in_meeting["student_id"].'_comment_in_meeting_'.$meeting["reunion_id"].'" class="form-control" rows="4" id="comment">' . $student_in_meeting["extra_info"] . '</textarea>';
