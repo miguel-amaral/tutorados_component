@@ -185,12 +185,12 @@ class TutoradosViewListAllMeetings extends AppView {
 
 
             }
-            $html .= "<div class='row' style='margin-top: 20px;'>";
-//            $html .= "    <div class='col-xs-1'   ></div>";
-            $html .= "    <div class='text-center col-xs-2' style='margin-left: 10px' >";
-            $html .= '        <button type="submit" name="submit" class="btn btn-primary">Guardar Alterações</button>';
-            $html .= "    </div>";
-            $html .= "</div>";
+//            $html .= "<div class='row' style='margin-top: 20px;'>";
+////            $html .= "    <div class='col-xs-1'   ></div>";
+//            $html .= "    <div class='text-center col-xs-2' style='margin-left: 10px' >";
+//            $html .= '        <button type="submit" name="submit" class="btn btn-primary">Guardar Alterações</button>';
+//            $html .= "    </div>";
+//            $html .= "</div>";
             $html .= "</form>";
 		}
 		$html .= "        </div>";
