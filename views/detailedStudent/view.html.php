@@ -26,6 +26,10 @@ class TutoradosViewDetailedStudent extends AppView {
         $list_all_meetings_link = App::instance()->buildURL("com_tutorados", "listAllMeetings");
         $output_file_link = App::instance()->buildURL("com_tutorados", "createOutputFile",array("file"=> true));
 
+
+
+//        $html = " <script src=\"jquery.are-you-sure.js\"></script>";
+
         $html  ="<div class=\"collapse navbar-collapse\" role=\"tablist\" id=\"bs-example-navbar-collapse-1\">";
         $html .="    <ul class=\"nav nav-tabs\">";
         $html .="            <li><a href=$students_link>Alunos</a></li>";
@@ -58,7 +62,9 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .= "    </div>";
             $html .= "</div>";
 		}else{
-            $html .= "<form action=\"/index.php?com=".$_GET["com"]."&view=".$_GET["view"]."&detailedStudent=".$_GET["detailedStudent"]."\" method=\"POST\">";
+
+
+            $html .= "<form id=\"detailed-student\" action=\"/index.php?com=".$_GET["com"]."&view=".$_GET["view"]."&detailedStudent=".$_GET["detailedStudent"]."\" method=\"POST\">";
 			foreach($this->getData()["student"] as $student){
 //                $html .= "<div class=\"panel-body\" >";
 
@@ -368,6 +374,13 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .= "    </div>";
             $html .= "</div>";
             $html .= "</form>";
+
+
+
+            $html .= "  <script> $( document ).ready(function() {  $('form').areYouSure({
+        message: 'As alterações feitas à página não estão guardadas. '
+               + 'Se sair agora as alterações serão perdidas.'
+                });});</script>";
 
         }
 

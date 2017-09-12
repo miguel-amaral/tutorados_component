@@ -203,6 +203,10 @@ class TutoradosViewMeetings extends AppView {
             $html .= "    </div>";
             $html .= "</div>";
             $html .= "</form>";
+            $html .= "  <script> $( document ).ready(function() {  $('form').areYouSure({
+                message: 'As alterações feitas à página não estão guardadas. '
+                           + 'Se sair agora as alterações serão perdidas.'
+                });});</script>";
 		}
 		$html .= "        </div>";
 		$html .= "    </div>";

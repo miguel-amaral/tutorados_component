@@ -17,7 +17,8 @@ class ControlPermissions {
 
 //$this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($tutor_id);
     public static function isTutorAdmin($istID) {
-        $allowed = array("ist178865","ist90744");
+                        // Tomas     , Amaral,   Gonçalo Moura
+        $allowed = array("ist181201","ist178865","ist90744");
         return in_array($istID,$allowed);
     }
 }
