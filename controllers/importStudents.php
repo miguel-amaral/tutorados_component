@@ -50,6 +50,7 @@ class TutoradosControllerImportStudents extends AppController {
             //"application/vnd.ms-excel",
         if (!in_array($_FILES["students_file"]["type"], array(
             "text/csv"
+//            "text/plain"
         ))) {
             App::instance()->messages->addWarning
             ("Formato de ficheiro inválido: " . $_FILES["students_file"]["type"]);

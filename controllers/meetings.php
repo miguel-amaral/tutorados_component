@@ -29,7 +29,6 @@ class TutoradosControllerMeetings extends AppController {
 	 */
 	public function execute()
     {
-        //var_dump($_POST);
         if (isset($_POST["meetings"])) {
 //            ["meetings"]
 //            ["students_in_2"]
@@ -47,7 +46,7 @@ class TutoradosControllerMeetings extends AppController {
 
                         $student_individual_comment = $_POST[$student_id."_comment_in_meeting_".$meeting_id];
 
-                        echo ("Aluno " . $present . " em " . $meeting_id . " with " . $student_individual_comment . " <br><br>");
+//                        echo ("Aluno " . $present . " em " . $meeting_id . " with " . $student_individual_comment . " <br><br>");
 
                         $this->update_student_in_meeting($meeting_id,$student_id,$present,$student_individual_comment);
                     }
@@ -64,8 +63,6 @@ class TutoradosControllerMeetings extends AppController {
             $meeting_general_comment = $_POST["new_meeting_comment"];
             $date = $_POST["new_meeting_date"];
             $meeting_date  = DateTime::createFromFormat("d-m-Y G:i", $date)->format('Y-m-d H:i:s');
-//            var_dump($date);
-//            echo ($meeting_date->format('Y-m-d H:i:s'));
             $tutor_id = FenixEdu::getSingleton()->getIstId();
 
             $addMeetingControler = new TutoradosControllerAddMeeting();

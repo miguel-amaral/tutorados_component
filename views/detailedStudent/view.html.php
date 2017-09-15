@@ -296,7 +296,7 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .= "</div>";
             $html .= "<div class=\"tab-content\" style=\"margin-top:10px\">";
             $html .= "	<div class=\"tab-pane active\" id=\"temp\">";
-            $html .= "    <div class=\"panel panel-default\">";
+            $html .= "    <div class=\"panel panel-default\" >";
             $html .= "  	<div class=\"panel-heading\">";
             $html .= "  		<h3 class=\"panel-title\">Reuniões</h3>";
             $html .= "  	</div>";
@@ -369,7 +369,7 @@ class TutoradosViewDetailedStudent extends AppView {
             $html .= "</div>";
             $html .= "<div class='row'>";
             $html .= "    <div class='col-xs-1' style='margin-top: 10px;'  ></div>";
-            $html .= "    <div class='col-xs-10' style='margin-left: 10px' >";
+            $html .= "    <div class='col-xs-10' style='margin-left: 10px;margin-bottom: 25px' >";
             $html .= '        <button type="submit" name="submit" class="btn btn-primary">Guardar Alterações</button>';
             $html .= "    </div>";
             $html .= "</div>";

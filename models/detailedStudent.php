@@ -70,13 +70,9 @@ class TutoradosModelDetailedStudent extends AppModel {
 		                FROM tuturado_reunion_atendence   
 		                WHERE tuturado_reunion_atendence.reunion_id = :reunion_id AND present = 1",array("reunion_id"=>$meeting_id))[0]["total_attended"];
 
-//            var_dump($this->data["meetings"][$index]["number_students_meeting"]);
-//            echo("<br>");
-//            var_dump($this->data["meetings"][$index]["number_students_present"]);
-//            echo("<br>");
+
             $this->data["meetings"][$index]["per_cent"] = $this->data["meetings"][$index]["number_students_present"] * 100/$this->data["meetings"][$index]["number_students_meeting"];
-//            var_dump($this->data["meetings"][$index]["per_cent"]);
-//            echo("$meeting_id<br><br>");
+
 //            $this->data["meetings"][$index]["per_cent"] = explode( '.',$this->data["meetings"][$index]["per_cent"])[0];
             $index++;
         }

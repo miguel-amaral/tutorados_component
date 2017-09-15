@@ -31,16 +31,34 @@ class TutoradosModelAddMeeting extends AppModel {
 	 */
 	public function __construct(){
 		$this->data = array("students" => array());
+		$this->data = array("real_students" => array());
+		$this->data = array("selected_tutoria_year" => "");
 	}
 	public function execute(){
         $fenixEdu = FenixEdu::getSingleton();
 
+
+
         $istId = $fenixEdu->getIstId();
-		$this->data["students"] = App::instance()->db->
-            select(array("istid","name",  "ist_number","email", "telefone", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number","extra_info"))->
-            from("tuturado_student ")->
+        //For counting purposes
+            $this->data["real_students"] = App::instance()->db->
+                select(array("istid"))->
+                from("tuturado_student ")->
             where("tutor_id=:tutor_id")->
             dispatch(array("tutor_id" => $istId));
+
+
+        if(isset($_POST["tutoria_year"])) {
+            $tutoria_year = $_POST["tutoria_year"];
+            $this->data["selected_tutoria_year"] = $tutoria_year;
+            $this->data["students"] = App::instance()->db->
+                select(array("istid","name",  "ist_number","email", "telefone", "other", "preferencial_contact", "entry_grade", "deslocated", "entry_phase", "option_number","extra_info"))->
+                from("tuturado_student ")->
+                where("tutor_id=:tutor_id AND entry_year=:tutoria_year")->
+                dispatch(array("tutor_id" => $istId,"tutoria_year" => $tutoria_year));
+        }
+        $this->data["possible_tutoria_years"] = App::instance()->db->
+                execute("select distinct entry_year from tuturado_student where tutor_id = :tutor_id",array("tutor_id" => $istId));
 
         $this->data["isTutorAdmin"] = ControlPermissions::isTutorAdmin($istId);
 

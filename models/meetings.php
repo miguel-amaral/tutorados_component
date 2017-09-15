@@ -51,10 +51,7 @@ class TutoradosModelMeetings extends AppModel {
 //            where("tutor_id=:tutor_id")->
 //            dispatch(array("tutor_id" => $istId));
 
-//        echo("");
         $totalStudents = (int)$totalStudents[0]["totalStudents"];
-//        var_dump($totalStudents);
-//        echo("");
 
 
         $istId = $fenixEdu->getIstId();
@@ -69,16 +66,17 @@ class TutoradosModelMeetings extends AppModel {
         foreach($this->data["meetings"] as $meeting){
             $meeting_id = $meeting["reunion_id"];
             $this->data[$meeting_id] = App::instance()->db->
-                execute("SELECT tuturado_reunion_atendence.student_id,tuturado_student.name,tuturado_reunion_atendence.extra_info, present
-                         FROM tuturado_reunion_atendence JOIN tuturado_student ON tuturado_reunion_atendence.student_id=tuturado_student.istid
-                         WHERE tuturado_reunion_atendence.reunion_id=:reunion_id
-                         ORDER BY tuturado_reunion_atendence.student_id",array("reunion_id" => $meeting_id));
+                execute("
+                SELECT tuturado_reunion_atendence.student_id,tuturado_student.name,tuturado_reunion_atendence.extra_info, present 
+                         FROM tuturado_reunion_atendence JOIN tuturado_student ON tuturado_reunion_atendence.student_id=tuturado_student.istid 
+                         WHERE tuturado_reunion_atendence.reunion_id=:reunion_id 
+                         ORDER BY tuturado_reunion_atendence.student_id 
+                         ",array("reunion_id" => $meeting_id));
 //                select(array("tuturado_reunion_atendence.student_id","tuturado_student.name","tuturado_reunion_atendence.extra_info"))->
 //                from(array("tuturado_reunion_atendence","tuturado_student"),"tuturado_reunion_atendence.student_id=tuturado_student.istid")->
 //                where("tuturado_reunion_atendence.reunion_id=:reunion_id")->
 //                dispatch(array("reunion_id" => $meeting_id));
 
-//            var_dump($this->data[$meeting_id]);
             $attendanceNumbers = 0;
             foreach ($this->data[$meeting_id] as $student) {
                 if($student["present"]==1) {
@@ -86,7 +84,7 @@ class TutoradosModelMeetings extends AppModel {
                 }
             }
 
-            $this->data["meetings"][$counter]["attendance"] = (int)(($attendanceNumbers * 100 ) / ($totalStudents));
+            $this->data["meetings"][$counter]["attendance"] = (int)(($attendanceNumbers * 100 ) / (sizeof($this->data[$meeting_id])));
             $counter  = $counter +1;
         }
 

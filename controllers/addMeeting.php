@@ -31,8 +31,6 @@ class TutoradosControllerAddMeeting extends AppController {
 	        $meeting_general_comment = $_POST["new_meeting_comment"];
             $date = $_POST["new_meeting_date"];
             $meeting_date  = DateTime::createFromFormat("d-m-Y G:i", $date)->format('Y-m-d H:i:s');
-//            var_dump($date);
-//            echo ($meeting_date->format('Y-m-d H:i:s'));
             $tutor_id = FenixEdu::getSingleton()->getIstId();
             $this->add_meeting($tutor_id,$place,$meio,$meeting_general_comment,$meeting_date);
 
@@ -89,7 +87,6 @@ class TutoradosControllerAddMeeting extends AppController {
                 "extra_info" => $meeting_general_comment,
             ));
 
-        var_dump($reunion_id[0]["reunion_id"]);
         return $reunion_id[0]["reunion_id"];
     }
 

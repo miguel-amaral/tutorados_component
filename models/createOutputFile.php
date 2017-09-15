@@ -72,7 +72,6 @@ class TutoradosModelCreateOutputFile extends AppModel {
 //                where("tuturado_reunion_atendence.reunion_id=:reunion_id")->
 //                dispatch(array("reunion_id" => $meeting_id));
 
-//            var_dump($this->data[$meeting_id]);
             $attendanceNumbers = 0;
             foreach ($this->data[$meeting_id] as $student) {
                 if($student["present"]==1) {
