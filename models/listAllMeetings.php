@@ -80,7 +80,7 @@ class TutoradosModelListAllMeetings extends AppModel {
                 }
             }
 
-            $this->data["meetings"][$counter]["attendance"] = (int)(($attendanceNumbers * 100 ) / ($totalStudents));
+            $this->data["meetings"][$counter]["attendance"] = (int)(($attendanceNumbers * 100 ) / (sizeof($this->data[$meeting_id])));
             $counter  = $counter +1;
         }
 
